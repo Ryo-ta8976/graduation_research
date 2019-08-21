@@ -1,0 +1,3 @@
+funciton hello(){
+    alert("Hello!!")
+}

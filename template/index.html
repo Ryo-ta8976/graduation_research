@@ -1,0 +1,116 @@
+<html>
+<head>
+    <script type="text/javascript" src="js/three.js-master/build/three.min.js"></script>
+    <script type="text/javascript" src="js/OrbitControls.js"></script>
+</head>
+
+<body>
+    <div id="WebGL-area"></div>
+
+    <script type="text/javascript">
+    function getValue() {
+      //promiseを使うことで簡潔に記述できる
+      return new Promise((resolve, reject) => { //resolveまたはrejectの結果を返す
+        var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成、サーバと非同期通信するためのAPI
+        req.open("get", "http://192.168.50.226:1234/get_value", false); // アクセスするファイルを指定、falseは同期処理
+        //req.open("get", "http://192.168.100.113:1234/get_value", true);
+        //req.setRequestHeader("Access-Control-Allow-Origin", "*");
+        //受信が成功した時に呼び出されるイベント
+        req.onload = () => {
+          //通信が正常に終了したかを確認する
+          if (req.readyState === 4 && req.status === 200) {
+            //resolve(req.responseType);
+            resolve(req.response);
+          } else {
+            alert(req.status);
+            reject(new Error(req.statusText));
+          }
+        };
+        //受信が失敗した時に呼び出されるイベント
+        req.onerror = () => {
+          reject(new Error(req.statusText));
+        };
+        
+        //req.responseType = 'json';
+        req.send(null); // HTTPリクエストの発行
+      });
+    }
+
+
+
+
+    async function init() {
+        var scene = new THREE.Scene();
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(900, 600);
+
+        document.getElementById("WebGL-area").appendChild(renderer.domElement);
+
+
+
+
+        var camera = new THREE.PerspectiveCamera(45, 1.5, 0.1, 1000);
+        camera.position.set(30, 45, 30);
+        camera.lookAt(scene.position);
+
+        var controls = new THREE.OrbitControls(camera);
+        controls.autoRotate = true; //自動周回
+
+
+        // 座標軸を表示
+        var axes = new THREE.AxisHelper(100);
+        scene.add(axes);
+
+        
+
+        var value;
+        var dis=[];
+        var rot=[];
+        //dis,rot = await getCSV();
+        value = await getValue();
+        value = JSON.parse(value);
+        dis=value[0].dist;
+        rot=value[0].rot;
+        console.log(dis);
+        console.log(rot);
+
+        // for(var i=0;i<1000;i++){
+        //   geometry.vertices[i]= new THREE.Vector3((data[i][0] * Math.cos( data[i][1] * (Math.PI / 180) ))/2,
+        //                                             0,
+        //                                             (data[i][0] * Math.sin( data[i][1] * (Math.PI / 180) ))/2);
+        // }
+
+        //形状オブジェクトの宣言と生成
+        var geometry= new THREE.Geometry();
+
+        for(var i=0;i<2000;i++){
+          var x=(dis[i] * Math.cos( rot[i] * (Math.PI / 180) ))/2;
+          var y=(dis[i] * Math.sin( rot[i] * (Math.PI / 180) ))/2;
+          //alert(x);
+          //alert(y);
+          //geometry.vertices[i]= new THREE.Vector3(x,0,y);
+          geometry.vertices.push(new THREE.Vector3(x,0,y));
+        }
+
+        //材質オブジェクトの宣言と生成
+        var material=new THREE.ParticleBasicMaterial({color: 0xFF0000, size: 10.0});
+        //点オブジェクトの生成
+        var particles = new THREE.ParticleSystem(geometry,material);
+        //点オブジェクトのシーンへの追加
+        scene.add(particles);
+
+
+
+        render();
+
+        function render() {
+            controls.update();
+            requestAnimationFrame(render);
+            renderer.render(scene, camera);
+        }
+    }
+      window.onload = init
+    </script>
+</body>
+</html>
