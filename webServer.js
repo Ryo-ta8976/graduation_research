@@ -118,21 +118,10 @@ server.on('request', function (req, res) {
            },
            "postData": function() {
                 req.on('data', function(data) {
-                    data_string += data.toString('utf-8', 0, data.length); //バッファをstringに変換
-                    //data_json = JSON.parse(data_string);
-                    //console.log(typeof(data_json));
-                   // var buf = Buffer.from(JSON.stringify(data));
-                    //var temp =JSON.parse(buf.toString);
-                    //console.log(temp);
-                    //console.log(data.toJSON());
-                    //data_parse = JSON.parse(data);
-                    //console.log(data_parse);
-                    //data_raspi.push(data.toJSON());
-                    //data_json = JSON.parse(data || "null");
+                    data_string += data.toString('utf-8', 0, data.length); //バッファをstringに逐一変換
                 });
                 req.on('end', function() {
-                    //console.log(data_raspi);
-                    var data_json = JSON.parse(data_string);
+                    var data_json = JSON.parse(data_string); //stringをjsonに変換
                     console.log(data_json.rot);
                 });
            }
