@@ -20,7 +20,6 @@ var https = require('https');
 var url_json = 'https://api.atnd.org/events/?keyword_or=javascript&format=json';
 var data_raspi = [];
 var data_string = "";
-var count = 1; //データをカウントする
 
 
 
@@ -126,11 +125,12 @@ server.on('request', function (req, res) {
                 //console.log(data_json.rot);
 
 
-                //jsonに順番を追加(あとで最新の物を検索して取り出せるように)
-                data_json["number"] = count;
-                count++;
+                //jsonにタイムスタンプを追加(あとで最新の物を検索して取り出せるように)
+                var time=new Date().getTime();
+                data_json["time"] = time;
+                console.log(data_json.time);
 
-                //データをDBに保存s
+                //データをDBに保存
                 collection.insertOne(data_json);
             });
         }
