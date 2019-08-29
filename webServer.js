@@ -122,7 +122,8 @@ server.on('request', function (req, res) {
                 });
                 req.on('end', function() {
                     var data_json = JSON.parse(data_string); //stringをjsonに変換
-                    console.log(data_json.rot);
+                    //console.log(data_json.rot);
+                    collection.insertOne(data_json);
                 });
            }
     };
