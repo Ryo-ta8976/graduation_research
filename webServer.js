@@ -7,9 +7,9 @@ var server = http.createServer();
 
 //DB接続準備
 const MongoClient = require('mongodb').MongoClient;
- const url_db = 'mongodb://localhost:27017'; // Connection URL
+const url_db = 'mongodb://localhost:27017'; // Connection URL
 const dbName = 'study'; // Database Name
-const client = new MongoClient(url_db,{useNewUrlParser: true});
+const client = new MongoClient(url_db, { useNewUrlParser: true });
 const assert = require('assert');
 var collection;
 var value;
@@ -20,11 +20,12 @@ var https = require('https');
 var url_json = 'https://api.atnd.org/events/?keyword_or=javascript&format=json';
 var data_raspi = [];
 var data_string = "";
+var count = 1; //データをカウントする
 
 
 
 // Use connect method to connect to the server
-client.connect(function(err) {
+client.connect(function (err) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
 
@@ -33,10 +34,10 @@ client.connect(function(err) {
     // Get the documents collection
     collection = db.collection('user');
 
-    collection.find({}).toArray(function(err, docs) {
+    collection.find({}).toArray(function (err, docs) {
         //assert.equal(err, null);
         //console.log("Found the following records");
-        value=docs;
+        value = docs;
         //console.log(value);
         //callback(docs);
     });
@@ -72,60 +73,67 @@ server.on('request', function (req, res) {
                 res.write(data);
                 res.end();
             });
-         },
-         "getOrbit": function () {
+        },
+        "getOrbit": function () {
             var template = fs.readFile('./js/OrbitControls.js', 'utf-8', function (err, data) {
-                 // HTTPレスポンスヘッダを出力する
-                 res.writeHead(200, {
-                     'content-Type': 'text/javascript'
-                 });
-
-                 // HTTPレスポンスボディを出力する
-                 res.write(data);
-                 res.end();
-             });
-          },
-          "getValue": function () {
-                //結果
-                // var value;
-                    
-                // Find some documents
-                /*collection.find({}).toArray(function(err, docs) {
-                    //assert.equal(err, null);
-                    //console.log("Found the following records");
-                    value=docs;
-                    console.log(value);
-                    callback(docs);
-                });*/
-                /*value=collection.find();
-                console.log(value);*/
-                
-                client.close();
-                
                 // HTTPレスポンスヘッダを出力する
                 res.writeHead(200, {
-                    'content-Type': 'text/html',
-                    'Access-Control-Allow-Origin': '*'
+                    'content-Type': 'text/javascript'
                 });
 
-                console.log("レスポンス");
-                //console.log(result);
-
-                console.log(value);
                 // HTTPレスポンスボディを出力する
-                res.write(JSON.stringify(value));
+                res.write(data);
                 res.end();
-           },
-           "postData": function() {
-                req.on('data', function(data) {
-                    data_string += data.toString('utf-8', 0, data.length); //バッファをstringに逐一変換
-                });
-                req.on('end', function() {
-                    var data_json = JSON.parse(data_string); //stringをjsonに変換
-                    //console.log(data_json.rot);
-                    collection.insertOne(data_json);
-                });
-           }
+            });
+        },
+        "getValue": function () {
+            //結果
+            // var value;
+
+            // Find some documents
+            /*collection.find({}).toArray(function(err, docs) {
+                //assert.equal(err, null);
+                //console.log("Found the following records");
+                value=docs;
+                console.log(value);
+                callback(docs);
+            });*/
+            /*value=collection.find();
+            console.log(value);*/
+
+            client.close();
+
+            // HTTPレスポンスヘッダを出力する
+            res.writeHead(200, {
+                'content-Type': 'text/html',
+                'Access-Control-Allow-Origin': '*'
+            });
+
+            console.log("レスポンス");
+            //console.log(result);
+
+            console.log(value);
+            // HTTPレスポンスボディを出力する
+            res.write(JSON.stringify(value));
+            res.end();
+        },
+        "postData": function () {
+            req.on('data', function (data) {
+                data_string += data.toString('utf-8', 0, data.length); //バッファをstringに逐一変換
+            });
+            req.on('end', function () {
+                var data_json = JSON.parse(data_string); //stringをjsonに変換
+                //console.log(data_json.rot);
+
+
+                //jsonに順番を追加(あとで最新の物を検索して取り出せるように)
+                data_json["number"] = count;
+                count++;
+
+                //データをDBに保存s
+                collection.insertOne(data_json);
+            });
+        }
     };
     // urlのpathをuriに代入
     var uri = url.parse(req.url).pathname;
@@ -153,8 +161,8 @@ server.on('request', function (req, res) {
         // URLが「IPアドレス/:1234/post_data」の場合、"postData"の処理を行う
         Response["postData"]();
     };
-  });
+});
 
-  // 指定されたポート(1234)でコネクションの受け入れを開始する
-  server.listen(1234);
-  console.log('Server running ');
+// 指定されたポート(1234)でコネクションの受け入れを開始する
+server.listen(1234);
+console.log('Server running ');
