@@ -23,3 +23,11 @@ body {
 	background-color: #0c0d12;
 	background-size: 20px 20px;
 }
+
+#WebGL-area {
+	display: inline-block;
+	margin: 30px;
+	border: solid 5px #fff;
+	width: 690px;
+	height: 460px;
+}
