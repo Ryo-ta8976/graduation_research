@@ -33,12 +33,13 @@ client.connect(function (err) {
     // Get the documents collection
     collection = db.collection('user');
 
-    collection.find({}).toArray(function (err, docs) {
-        //assert.equal(err, null);
-        //console.log("Found the following records");
-        value = docs;
-        //console.log(value);
-        //callback(docs);
+    collection.find({}).sort({time: -1}).toArray(function (err, docs) {
+        console.log("はいった");
+        for (var doc of docs){
+            value = doc;
+            break;
+        }
+        //value = docs;
     });
 });
 
@@ -86,21 +87,9 @@ server.on('request', function (req, res) {
             });
         },
         "getValue": function () {
-            //結果
-            // var value;
-
-            // Find some documents
-            /*collection.find({}).toArray(function(err, docs) {
-                //assert.equal(err, null);
-                //console.log("Found the following records");
-                value=docs;
-                console.log(value);
-                callback(docs);
-            });*/
-            /*value=collection.find();
-            console.log(value);*/
-
-            client.close();
+           
+            
+            //client.close();
 
             // HTTPレスポンスヘッダを出力する
             res.writeHead(200, {
@@ -132,6 +121,7 @@ server.on('request', function (req, res) {
 
                 //データをDBに保存
                 collection.insertOne(data_json);
+                console.log('json data insert DB');
             });
         }
     };
