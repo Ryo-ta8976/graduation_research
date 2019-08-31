@@ -33,9 +33,9 @@ client.connect(function (err) {
     // Get the documents collection
     collection = db.collection('user');
 
-    collection.find({}).sort({time: -1}).toArray(function (err, docs) {
+    collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
         console.log("はいった");
-        for (var doc of docs){
+        for (var doc of docs) {
             value = doc;
             break;
         }
@@ -86,9 +86,21 @@ server.on('request', function (req, res) {
                 res.end();
             });
         },
+        "getCSS": function () {
+            var template = fs.readFile('./css/index.css', 'utf-8', function (err, data) {
+                // HTTPレスポンスヘッダを出力する
+                res.writeHead(200, {
+                    'content-Type': 'text/css'
+                });
+
+                // HTTPレスポンスボディを出力する
+                res.write(data);
+                res.end();
+            });
+        },
         "getValue": function () {
-           
-            
+
+
             //client.close();
 
             // HTTPレスポンスヘッダを出力する
@@ -115,7 +127,7 @@ server.on('request', function (req, res) {
 
 
                 //jsonにタイムスタンプを追加(あとで最新の物を検索して取り出せるように)
-                var time=new Date().getTime();
+                var time = new Date().getTime();
                 data_json["time"] = time;
                 console.log(data_json.time);
 
@@ -142,6 +154,9 @@ server.on('request', function (req, res) {
     } else if (uri === "/js/OrbitControls.js") {
         // URLが「IPアドレス/:1234/js/OrbitControls.js」の場合、"getOrbit"の処理を行う
         Response["getOrbit"]();
+        return;
+    } else if (uri === "/css/index.css") {
+        Response["getCSS"]();
         return;
     } else if (uri === "/get_value") {
         // URLが「IPアドレス/:1234/get_value」の場合、"getThree"の処理を行う
