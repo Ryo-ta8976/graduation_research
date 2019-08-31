@@ -12,8 +12,8 @@
       //promiseを使うことで簡潔に記述できる
       return new Promise((resolve, reject) => { //resolveまたはrejectの結果を返す
         var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成、サーバと非同期通信するためのAPI
-        //req.open("get", "http://192.168.50.226:1234/get_value", false); // アクセスするファイルを指定、falseは同期処理
-        req.open("get", "http://172.16.10.137:1234/get_value", true);
+        req.open("get", "http://192.168.50.226:1234/get_value", true); // アクセスするファイルを指定、falseは同期処理
+        //req.open("get", "http://172.16.10.137:1234/get_value", true);
         //req.setRequestHeader("Access-Control-Allow-Origin", "*");
         //受信が成功した時に呼び出されるイベント
         req.onload = () => {
@@ -70,10 +70,12 @@
         //dis,rot = await getCSV();
         value = await getValue();
         value = JSON.parse(value);
-        dis=value[0].dist;
-        rot=value[0].rot;
-        console.log(dis);
-        console.log(rot);
+        console.log(value);
+        dis=value.dist;
+        rot=value.rot;
+        //dis=value[0].dist;
+        //rot=value[0].rot;
+        
 
         // for(var i=0;i<1000;i++){
         //   geometry.vertices[i]= new THREE.Vector3((data[i][0] * Math.cos( data[i][1] * (Math.PI / 180) ))/2,
