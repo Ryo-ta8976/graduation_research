@@ -12,7 +12,7 @@ const dbName = 'study'; // Database Name
 const client = new MongoClient(url_db, { useNewUrlParser: true });
 const assert = require('assert');
 var collection;
-var value;
+//var value;
 
 
 //rasberrypiとの接続準備
@@ -33,15 +33,35 @@ client.connect(function (err) {
     // Get the documents collection
     collection = db.collection('user');
 
-    collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
+    /*collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
         console.log("はいった");
         for (var doc of docs) {
             value = doc;
             break;
         }
         //value = docs;
-    });
+    });*/
 });
+
+function asyncFunc() {
+    return new Promise((resolve) => {
+        // ...何かしらの時間がかかる処理...
+        let result;
+
+        collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
+            console.log("はいった");
+            for (var doc of docs) {
+                result = doc;
+                break;
+            }
+            //value = docs;
+        });
+
+
+        resolve(result);
+    });
+
+}
 
 
 // http.createServerがrequestされたら、(イベントハンドラ)
@@ -98,9 +118,9 @@ server.on('request', function (req, res) {
                 res.end();
             });
         },
-        "getValue": function () {
+        "getValue": async function () {
 
-
+            let value = await asyncFunc();
             //client.close();
 
             // HTTPレスポンスヘッダを出力する
