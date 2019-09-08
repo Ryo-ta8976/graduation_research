@@ -50,15 +50,16 @@ function asyncFunc() {
 
         collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
             console.log("はいった");
-            for (var doc of docs) {
+            for (let doc of docs) {
                 result = doc;
                 break;
             }
             //value = docs;
+            resolve(result);
         });
 
-
-        resolve(result);
+        //process.on('unhandledRejection', console.dir)
+        
     });
 
 }
