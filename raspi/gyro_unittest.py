@@ -112,7 +112,7 @@ def get_gyro_data_deg():
 i=0
 gyro_z=[]
 rotation_degree=[]
-
+sum=0
 
 while  i<5000:
     
@@ -128,6 +128,7 @@ while  i<5000:
     z=get_gyro_data_deg()
     t_after = time.time()
     elapsed_time=t_after-t_before
+    sum+=elapsed_time
     t_before=t_after
     gyro_z.append(z)
     
@@ -171,5 +172,7 @@ for i in range(3000):
     sum_degree=sum_degree+rotation_degree[i]
     print('degree: %08.3f' % sum_degree)
     print('\n')
+
+print(sum/5000)
 
 file.close()
