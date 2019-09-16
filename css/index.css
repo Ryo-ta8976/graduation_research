@@ -22,6 +22,7 @@ body {
 		transparent 50%, transparent 75%, #191b24 75%, #191b24);
 	background-color: #0c0d12;
 	background-size: 20px 20px;
+	float: left;
 }
 
 #WebGL-area {

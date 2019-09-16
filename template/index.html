@@ -3,6 +3,7 @@
 <head>
   <script type="text/javascript" src="js/three.js-master/build/three.min.js"></script>
   <script type="text/javascript" src="js/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
   <link rel="stylesheet" href="css/index.css">
 </head>
 
@@ -12,6 +13,9 @@
   </header>
 
   <div id="WebGL-area"></div>
+  <div style="height:40%; width:40%; float: left; margin: 30px;">
+    <canvas id="myLineChart"></canvas>
+  </div>
 
   <script type="text/javascript">
     function getValue() {
@@ -119,6 +123,56 @@
       }
     }
     window.onload = init
+
+
+    var ctx = document.getElementById("myLineChart");
+
+    Chart.plugins.register({
+      beforeDraw: function (ch) {
+        var ctx = ch.chart.ctx;
+        ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        ctx.fillRect(0, 0, ch.chart.width, ch.chart.height);
+      }
+    });
+
+    var myLineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2019-09-10-08-20', '2019-09-10-08-21', '2019-09-10-08-22', '2019-09-10-08-23', '2019-09-10-08-24', '2019-09-10-08-25', '2019-09-10-08-26'],
+        datasets: [
+          {
+            label: '最高気温(度）',
+            data: [35, 34, 37, 35, 34, 35, 34, 25],
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '最低気温(度）',
+            data: [25, 27, 27, 25, 26, 27, 25, 21],
+            borderColor: "rgba(0,0,255,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '気温（8月1日~8月7日）'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              suggestedMax: 40,
+              suggestedMin: 0,
+              stepSize: 10,
+              callback: function (value, index, values) {
+                return value + '度'
+              }
+            }
+          }]
+        },
+      }
+    });
   </script>
 </body>
 
