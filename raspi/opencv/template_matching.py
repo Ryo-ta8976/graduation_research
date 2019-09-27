@@ -9,8 +9,8 @@ import sys
 if __name__ == '__main__':
     
     # 対象画像を指定
-    base_image_path = './result.png'
-    temp_image_path = './base2.png'
+    base_image_path = './sample.png'
+    temp_image_path = './base_0.png'
     
     # 画像をグレースケールで読み込み
     gray_base_src = cv2.imread(base_image_path, cv2.IMREAD_GRAYSCALE)
@@ -54,6 +54,8 @@ if __name__ == '__main__':
         c_height, c_width = crop_src.shape[:2]
 
         print(crop_src.shape,gray_temp_src.shape)
+        if(crop_src.shape<gray_temp_src.shape):
+            continue
         res = cv2.matchTemplate(crop_src, gray_temp_src, cv2.TM_CCOEFF_NORMED)
         res_num = cv2.minMaxLoc(res)[1]
         cv2.putText(color_src, str(i + 1) + ") " +str(round(res_num, 3)), (x0, y1 + 15), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 255))
