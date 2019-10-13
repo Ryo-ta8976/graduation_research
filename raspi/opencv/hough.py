@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 
-img = cv2.imread("binari_led.png")
+img = cv2.imread("./pictures/led_small.png")
 
 # グレースケールに変換する。
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -17,7 +17,7 @@ ret, edges = cv2.threshold(gray, 250, 255, cv2.THRESH_BINARY)
 pi = np.pi
 
 # ハフ変換で直線検出する。
-lines = cv2.HoughLines(edges, 1, pi / 180, 400)
+lines = cv2.HoughLines(edges, 1, pi / 180, 60)
 for line in lines:
     for rho, theta in line:
         a = np.cos(theta)
@@ -40,4 +40,4 @@ for line in lines:
         else:
             radian=0
 
-cv2.imwrite('result_hough.png', img)
+cv2.imwrite('./pictures/result_hough.png', img)
