@@ -1,0 +1,199 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="js/three.js-master/build/three.min.js"></script>
+  <script type="text/javascript" src="js/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+  <link rel="stylesheet" href="css/index.css">
+
+  <meta http-equiv="content-type" charset="utf-8">
+</head>
+
+<body>
+  <header class="topNavigation">
+    <p>Demo System</p>
+  </header>
+
+  <div id="WebGL-area"></div>
+  <div style="height:40%; width:40%; float: left; margin: 20px;">
+    <canvas id="myLineChart1"></canvas>
+  </div>
+  <div style="height:40%; width:40%; float: left; margin: 20px;">
+    <canvas id="myLineChart2"></canvas>
+  </div>
+
+
+
+  <script type="text/javascript">
+    function getValue() {
+      //promiseを使うことで簡潔に記述できる
+      return new Promise((resolve, reject) => { //resolveまたはrejectの結果を返す
+        var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成、サーバと非同期通信するためのAPI
+        //req.open("get", "http://192.168.50.226:1234/get_value", true); // アクセスするファイルを指定、falseは同期処理
+        //req.open("get", "http://172.16.10.137:1234/get_value", true);
+        req.open("get", "http://192.168.10.3:1234/get_value", true);
+        //req.setRequestHeader("Access-Control-Allow-Origin", "*");
+        //受信が成功した時に呼び出されるイベント
+        req.onload = () => {
+          //通信が正常に終了したかを確認する
+          if (req.readyState === 4 && req.status === 200) {
+            //resolve(req.responseType);
+            resolve(req.response);
+          } else {
+            alert(req.status);
+            reject(new Error(req.statusText));
+          }
+        };
+        //受信が失敗した時に呼び出されるイベント
+        req.onerror = () => {
+          reject(new Error(req.statusText));
+        };
+        //req.responseType = 'json';
+        req.send(null); // HTTPリクエストの発行
+      });
+    }
+    async function init() {
+      var scene = new THREE.Scene();
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(690, 460);
+      document.getElementById("WebGL-area").appendChild(renderer.domElement);
+      var camera = new THREE.PerspectiveCamera(45, 1.5, 0.1, 1000);
+      camera.position.set(30, 45, 30);
+      camera.lookAt(scene.position);
+      var controls = new THREE.OrbitControls(camera);
+      controls.autoRotate = true; //自動周回
+      // 座標軸を表示
+      var axes = new THREE.AxisHelper(100);
+      scene.add(axes);
+      var value;
+      var dis = [];
+      var rot = [];
+      //dis,rot = await getCSV();
+      value = await getValue();
+      value = JSON.parse(value);
+      console.log(value);
+      dis = value.dist;
+      rot = value.rot;
+      //dis=value[0].dist;
+      //rot=value[0].rot;
+      // for(var i=0;i<1000;i++){
+      //   geometry.vertices[i]= new THREE.Vector3((data[i][0] * Math.cos( data[i][1] * (Math.PI / 180) ))/2,
+      //                                             0,
+      //                                             (data[i][0] * Math.sin( data[i][1] * (Math.PI / 180) ))/2);
+      // }
+      //形状オブジェクトの宣言と生成
+      var geometry = new THREE.Geometry();
+      for (var i = 0; i < 2000; i++) {
+        var x = (dis[i] * Math.cos(rot[i] * (Math.PI / 180))) / 2;
+        var y = (dis[i] * Math.sin(rot[i] * (Math.PI / 180))) / 2;
+        //alert(x);
+        //alert(y);
+        //geometry.vertices[i]= new THREE.Vector3(x,0,y);
+        geometry.vertices.push(new THREE.Vector3(x, 0, y));
+      }
+      //材質オブジェクトの宣言と生成
+      var material = new THREE.ParticleBasicMaterial({ color: 0xFF0000, size: 10.0 });
+      //点オブジェクトの生成
+      var particles = new THREE.ParticleSystem(geometry, material);
+      //点オブジェクトのシーンへの追加
+      scene.add(particles);
+      render();
+      function render() {
+        controls.update();
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+      }
+    }
+    window.onload = init
+
+    var ctx = document.getElementById("myLineChart1");
+    Chart.plugins.register({
+      beforeDraw: function (ch) {
+        var ctx = ch.chart.ctx;
+        ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        ctx.fillRect(0, 0, ch.chart.width, ch.chart.height);
+      }
+    });
+    var myLineChart1 = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2019-09-10-08-20', '2019-09-10-08-21', '2019-09-10-08-22', '2019-09-10-08-23', '2019-09-10-08-24', '2019-09-10-08-25', '2019-09-10-08-26'],
+        datasets: [
+          {
+            label: '最高室温(度）',
+            data: [35, 34, 37, 35, 34, 35, 34, 25],
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '最低室温(度）',
+            data: [25, 27, 27, 25, 26, 27, 25, 21],
+            borderColor: "rgba(0,0,255,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '室温'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              suggestedMax: 40,
+              suggestedMin: 0,
+              stepSize: 10,
+              callback: function (value, index, values) {
+                return value + '度'
+              }
+            }
+          }]
+        },
+      }
+    });
+
+    var ctx = document.getElementById("myLineChart2");
+    Chart.plugins.register({
+      beforeDraw: function (ch) {
+        var ctx = ch.chart.ctx;
+        ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        ctx.fillRect(0, 0, ch.chart.width, ch.chart.height);
+      }
+    });
+    var myLineChart1 = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['2019-09-10-08-20', '2019-09-10-08-21', '2019-09-10-08-22', '2019-09-10-08-23', '2019-09-10-08-24', '2019-09-10-08-25', '2019-09-10-08-26'],
+        datasets: [
+          {
+            label: '一酸化炭素濃度(ppm）',
+            data: [10, 13, 11, 10, 9, 9, 12, 10],
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: '一酸化炭素濃度'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              suggestedMax: 20,
+              suggestedMin: 0,
+              stepSize: 5,
+              callback: function (value, index, values) {
+                return value + 'ppm'
+              }
+            }
+          }]
+        },
+      }
+    });
+  </script>
+</body>
+
+</html>
