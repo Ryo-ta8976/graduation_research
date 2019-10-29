@@ -1,0 +1,15 @@
+2019-07-29T08:01:50.285+0900 I CONTROL  [main] Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] MongoDB starting : pid=5325 port=27017 dbpath=/home/hasegawa/デスクトップ/akiyama/mongoDB-tmp/data/ 64-bit host=hasegawa-W76OC
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] db version v4.0.10
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] git version: c389e7f69f637f7a1ac3cc9fae843b635f20b766
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] OpenSSL version: OpenSSL 1.1.1  11 Sep 2018
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] allocator: tcmalloc
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] modules: none
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten] build environment:
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten]     distmod: ubuntu1804
+2019-07-29T08:01:50.289+0900 I CONTROL  [initandlisten]     distarch: x86_64
+2019-07-29T08:01:50.290+0900 I CONTROL  [initandlisten]     target_arch: x86_64
+2019-07-29T08:01:50.290+0900 I CONTROL  [initandlisten] options: { storage: { dbPath: "/home/hasegawa/デスクトップ/akiyama/mongoDB-tmp/data/" }, systemLog: { destination: "file", path: "/home/hasegawa/デスクトップ/akiyama/mongoDB-tmp/mongodb.log" } }
+2019-07-29T08:01:50.290+0900 E STORAGE  [initandlisten] Failed to set up listener: SocketException: Address already in use
+2019-07-29T08:01:50.291+0900 I CONTROL  [initandlisten] now exiting
+2019-07-29T08:01:50.291+0900 I CONTROL  [initandlisten] shutting down with code:48
