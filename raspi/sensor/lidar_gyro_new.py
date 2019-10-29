@@ -91,7 +91,7 @@ def get_dist():
     return dist
 
 
-for i in range(2000):
+for i in range(500):
     value = get_dist()
 
     z = get_gyro_data_deg()
@@ -110,7 +110,7 @@ for i in range(2000):
 
 sum = 0
 rot = []
-for i in range(2000):
+for i in range(500):
     sum_degree = sum_degree+rotation_degree[i]
     rot.append(sum_degree)
     #file.write("%d,%08.3f\n" % (dist[i],sum_degree) )
@@ -124,7 +124,7 @@ data = cl.OrderedDict()
 data["dist"] = dist
 data["rot"] = rot
 data = json.dumps(data)  # objectからstringに変換
-url = 'http://192.168.50.226:1234/post_data'
+url = 'http://192.168.10.3:1234/post_data'
 #url = 'http://172.16.10.137:1234/post_data'
 result = requests.post(url, data)
 # ys=data

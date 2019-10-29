@@ -114,7 +114,7 @@ gyro_z=[]
 rotation_degree=[]
 sum=0
 
-while  i<5000:
+while  i<1000:
     
     # 温度.
      #temp = get_temp()
@@ -163,7 +163,7 @@ while  i<5000:
     
 file=open('test_gyro.text','w')
     
-for i in range(3000):
+for i in range(1000):
     file.write('No. %d ' % i)
     file.write('degree: %08.3f ' % sum_degree)
     file.write('\n')
@@ -173,6 +173,6 @@ for i in range(3000):
     print('degree: %08.3f' % sum_degree)
     print('\n')
 
-print(sum/5000)
+print(sum/1000)
 
 file.close()
