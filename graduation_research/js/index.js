@@ -1,3 +1,0 @@
-funciton hello(){
-    alert("Hello!!")
-}
