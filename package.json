@@ -1,0 +1,22 @@
+{
+  "name": "akiyama_new",
+  "version": "1.0.0",
+  "description": "卒業研究用のリポジトリです。",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ryo-ta8976/graduation_research.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ryo-ta8976/graduation_research/issues"
+  },
+  "homepage": "https://github.com/Ryo-ta8976/graduation_research#readme",
+  "dependencies": {
+    "mongodb": "^3.3.3"
+  }
+}
