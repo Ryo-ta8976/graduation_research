@@ -2,7 +2,7 @@ var noble = require('noble');
 
 var DEVICE_NAME = "MyBlePeripheral";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
-var SERVICE_CHARACTERISTIC_UUID = "713d0001503e4c75ba943148f18d941e";
+var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
 
 //start ble
 noble.on('stateChange', function (state) {
@@ -22,7 +22,7 @@ noble.on('discover', function (peripheral) {
   console.log();
 
   //equals devicename
-  if (peripheral.advertisement.localName == DEVICE_NAME) {
+  if (peripheral.advertisement.uuid == SERVICE_CHARACTERISTIC_UUID) {
     console.log("find");
     noble.stopScanning();
 
