@@ -1,45 +1,31 @@
-'use strict';
+var noble = require('noble');
 
-const noble = require('noble-mac');
-//const noble = require('noble'); //npm install bobleをする必要あり
-const fs = require('fs');
+var DEVICE_NAME = "MyBlePeripheral";
+var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
+var SERVICE_CHARACTERISTIC_UUID = "713d0001503e4c75ba943148f18d941e";
 
-function asyncFunc(rssi) {
-  return new Promise((resolve) => {
-    // ...何かしらの時間がかかる処理...
-    let result;
-    console.log(rssi);
-
-    fs.appendFile('out.csv', ',' + rssi, (error) => {
-      result = "csvファイルに出力しました";
-      resolve(result);
-    })
-  });
-}
-
-//BLE deviceをさがす。
-const discovered = async (peripheral) => {
-  console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
-
-  if (peripheral.advertisement.localName === 'BlueJelly') {
+//start ble
+noble.on('stateChange', function (state) {
+  if (state === 'poweredOn') {
+    noble.startScanning();
+  } else {
     noble.stopScanning();
-    let text = await asyncFunc(peripheral.rssi);
-    noble.stopScanning();
-    console.log(text);
-    console.log('device found');
-
   }
-}
+});
 
-//スキャン開始
-const scanStart = () => {
-  noble.startScanning();
-  noble.on('discover', discovered);
-}
+//search ble
+noble.on('discover', function (peripheral) {
+  //output seach device
+  console.log("DEVICE_NAME: " + peripheral.advertisement.localName);
+  console.log("UUID: " + peripheral.uuid);
+  console.log("RSSI: " + peripheral.rssi);
+  console.log();
 
+  //equals devicename
+  if (peripheral.advertisement.localName == DEVICE_NAME) {
+    console.log("find");
+    noble.stopScanning();
 
-if (noble.state === 'poweredOn') {
-  scanStart();
-} else {
-  noble.on('stateChange', scanStart);
-}
+    console.log('device found');
+  }
+});
