@@ -32,23 +32,16 @@ client.connect(function (err) {
 
     // Get the documents collection
     collection = db.collection('user');
-
-    /*collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
-        console.log("はいった");
-        for (var doc of docs) {
-            value = doc;
-            break;
-        }
-        //value = docs;
-    });*/
 });
 
-function asyncFunc() {
+function asyncFunc(index) {
     return new Promise((resolve) => {
         // ...何かしらの時間がかかる処理...
         let result;
 
-        collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
+        let col=collection.find({"index":index});
+        col.sort({ time: -1 }).toArray(function (err, docs) {
+        //collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
             console.log("はいった");
             for (let doc of docs) {
                 result = doc;
@@ -121,7 +114,7 @@ server.on('request', function (req, res) {
         },
         "getValue": async function () {
 
-            let value = await asyncFunc();
+            let value = await asyncFunc(1);
             //client.close();
 
             // HTTPレスポンスヘッダを出力する
@@ -151,6 +144,31 @@ server.on('request', function (req, res) {
                 var time = new Date().getTime();
                 data_json["time"] = time;
                 console.log(data_json.time);
+
+                //index:1はレイアウト
+                data_json["index"]=1;
+
+                //データをDBに保存
+                collection.insertOne(data_json);
+                console.log('json data insert DB');
+            });
+        },
+        "postGas": function () {
+            req.on('data', function (data) {
+                data_string += data.toString('utf-8', 0, data.length); //バッファをstringに逐一変換
+            });
+            req.on('end', function () {
+                var data_json = JSON.parse(data_string); //stringをjsonに変換
+                //console.log(data_json.rot);
+
+
+                //jsonにタイムスタンプを追加(あとで最新の物を検索して取り出せるように)
+                var time = new Date().getTime();
+                data_json["time"] = time;
+                console.log(data_json.time);
+
+                //index:2はgas
+                data_json["index"]=2;
 
                 //データをDBに保存
                 collection.insertOne(data_json);
@@ -186,6 +204,9 @@ server.on('request', function (req, res) {
     } else if (uri === "/post_data") {
         // URLが「IPアドレス/:1234/post_data」の場合、"postData"の処理を行う
         Response["postData"]();
+    } else if (uri === "/post_gas") {
+        // URLが「IPアドレス/:1234/post_gas」の場合、"postData"の処理を行う
+        Response["postGas"]();
     };
 });
 
