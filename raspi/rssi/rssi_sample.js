@@ -1,8 +1,10 @@
 var noble = require('noble');
+var fs = require('fs');
 
 var DEVICE_NAME = "ble_koji";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
 var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
+var count = 0;
 
 //start ble
 noble.on('stateChange', function (state) {
@@ -23,9 +25,13 @@ noble.on('discover', function (peripheral) {
 
   //equals devicename
   if (peripheral.advertisement.localName == DEVICE_NAME) {
-    console.log("find");
+    count++;
+    console.log("device find");
     noble.stopScanning();
-
-    console.log('device found');
+    fs.appendFile('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', rssi + ',', (error) => {
+    });
+    if (count < 10) {
+      noble.startScanning();
+    }
   }
 });
