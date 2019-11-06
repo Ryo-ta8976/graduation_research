@@ -1,5 +1,6 @@
 var noble = require('noble');
 var fs = require('fs');
+const csvSync = require('csv-parse/lib/sync');
 
 var DEVICE_NAME = "ble_koji";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
@@ -35,3 +36,7 @@ noble.on('discover', function (peripheral) {
     }
   }
 });
+
+let data = fs.readFileSync('ble.csv');
+let res = csvSync(data);
+console.log(res);
