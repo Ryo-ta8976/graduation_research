@@ -28,7 +28,7 @@ noble.on('discover', function (peripheral) {
     count++;
     console.log("device find");
     noble.stopScanning();
-    fs.appendFile('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', rssi + ',', (error) => {
+    fs.appendFile('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
     });
     if (count < 10) {
       noble.startScanning();
