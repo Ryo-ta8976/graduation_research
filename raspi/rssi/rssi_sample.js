@@ -38,7 +38,7 @@ noble.on('discover', function (peripheral) {
       let res = csvSync(data);
       let sum = 0;
       for (i = 0; i < 10; i++) {
-        sum += num;
+        sum += res[i];
       }
       let ave = sum / 10;
       console.log(ave);
