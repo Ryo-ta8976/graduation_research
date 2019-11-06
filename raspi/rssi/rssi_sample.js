@@ -37,6 +37,6 @@ noble.on('discover', function (peripheral) {
   }
 });
 
-let data = fs.readFileSync('ble.csv');
+let data = fs.readFileSync('./ble.csv');
 let res = csvSync(data);
 console.log(res);
