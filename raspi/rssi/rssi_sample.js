@@ -33,10 +33,10 @@ noble.on('discover', function (peripheral) {
     });
     if (count < 10) {
       noble.startScanning();
-    }
+    } else{
+	let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+	let res = csvSync(data);
+	console.log(res);
+	}
   }
 });
-
-let data = fs.readFileSync('./ble.csv');
-let res = csvSync(data);
-console.log(res);

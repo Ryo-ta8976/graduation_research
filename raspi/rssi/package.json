@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csv-parse": "^4.6.5",
     "noble": "^1.9.1"
   }
 }
