@@ -33,10 +33,16 @@ noble.on('discover', function (peripheral) {
     });
     if (count < 10) {
       noble.startScanning();
-    } else{
-	let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
-	let res = csvSync(data);
-	console.log(res);
-	}
+    } else {
+      let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      let res = csvSync(data);
+      let sum = 0;
+      for (i = 0; i < 10; i++) {
+        sum += num;
+      }
+      let ave = sum / 10;
+      console.log(ave);
+      fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+    }
   }
 });
