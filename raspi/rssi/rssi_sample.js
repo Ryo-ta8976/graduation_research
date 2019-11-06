@@ -22,7 +22,7 @@ noble.on('discover', function (peripheral) {
   console.log();
 
   //equals devicename
-  if (peripheral.advertisement.uuid == SERVICE_CHARACTERISTIC_UUID) {
+  if (peripheral.advertisement.localName == DEVICE_NAME) {
     console.log("find");
     noble.stopScanning();
 
