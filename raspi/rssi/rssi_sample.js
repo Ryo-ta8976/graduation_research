@@ -29,20 +29,26 @@ noble.on('discover', function (peripheral) {
     count++;
     console.log("device find");
     noble.stopScanning();
-    fs.appendFile('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
+    fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
     });
     if (count < 10) {
       noble.startScanning();
     } else {
       let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
       let res = csvSync(data);
+	console.log(typeof(res));
+	console.log(res);
       let sum = 0;
       for (i = 0; i < 10; i++) {
-        sum += res[i];
+        sum += (-1)*res[0][i];
       }
       let ave = sum / 10;
+	ave = (-1)*ave;
+	console.log('OK');
+	console.log(sum);
+	
       console.log(ave);
-      fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      //fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
     }
   }
 });
