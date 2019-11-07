@@ -45,7 +45,7 @@ noble.on('discover', function (peripheral) {
       let ave = sum / 10;
       ave = (-1) * ave;
       console.log(ave);
-      fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', peripheral.rssi + ',', (error) => {
+      fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
       });
       fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
     }
