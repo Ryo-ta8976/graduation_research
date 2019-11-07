@@ -47,7 +47,7 @@ noble.on('discover', function (peripheral) {
       console.log(ave);
       fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', peripheral.rssi + ',', (error) => {
       });
-      fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
     }
   }
 });
