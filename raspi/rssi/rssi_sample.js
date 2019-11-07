@@ -36,19 +36,18 @@ noble.on('discover', function (peripheral) {
     } else {
       let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
       let res = csvSync(data);
-	console.log(typeof(res));
-	console.log(res);
       let sum = 0;
+
       for (i = 0; i < 10; i++) {
-        sum += (-1)*res[0][i];
+        sum += (-1) * res[0][i];
       }
+
       let ave = sum / 10;
-	ave = (-1)*ave;
-	console.log('OK');
-	console.log(sum);
-	
+      ave = (-1) * ave;
       console.log(ave);
-      //fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', peripheral.rssi + ',', (error) => {
+      });
+      fs.unlink('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
     }
   }
 });
