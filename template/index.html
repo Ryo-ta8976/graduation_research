@@ -201,35 +201,45 @@
 
 
 
-var ctx = document.getElementById('myLineChart3').getContext('2d');
+    var ctx = document.getElementById('myLineChart3').getContext('2d');
 
-var chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    datasets: [{
-      data: []
-    }, {
-      data: []
-    }]
-  },
-  options: {
-    scales: {
-      xAxes: [{
-        type: 'realtime',
-        realtime: {
-          onRefresh: function(chart) {
-            chart.data.datasets.forEach(function(dataset) {
-              dataset.data.push({
-                x: Date.now(),
-                y: Math.random()
-              });
-            });
-          }
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'LPG',
+          data: [],
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        }, {
+          label: 'CO',
+          data: [],
+          borderColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgba(54, 162, 235, 0.5)'
+        }, {
+          label: 'SMOKE',
+          data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {
+              onRefresh: function (chart) {
+                chart.data.datasets.forEach(function (dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: Math.random()
+                  });
+                });
+              }
+          delay: 2000
+            }
+          }]
         }
-      }]
-    }
-  }
-});
+      }
+    });
 
   </script>
 </body>
