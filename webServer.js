@@ -39,9 +39,9 @@ function asyncFunc(index) {
         // ...何かしらの時間がかかる処理...
         let result;
 
-        let col=collection.find({"index":index});
+        let col = collection.find({ "index": index });
         col.sort({ time: -1 }).toArray(function (err, docs) {
-        //collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
+            //collection.find({}).sort({ time: -1 }).toArray(function (err, docs) {
             console.log("はいった");
             for (let doc of docs) {
                 result = doc;
@@ -52,7 +52,7 @@ function asyncFunc(index) {
         });
 
         //process.on('unhandledRejection', console.dir)
-        
+
     });
 
 }
@@ -155,6 +155,25 @@ server.on('request', function (req, res) {
             res.write(JSON.stringify(value));
             res.end();
         },
+        "getGas": async function () {
+
+            let value = await asyncFunc(2);
+            //client.close();
+
+            // HTTPレスポンスヘッダを出力する
+            res.writeHead(200, {
+                'content-Type': 'text/html',
+                'Access-Control-Allow-Origin': '*'
+            });
+
+            console.log("レスポンス");
+            //console.log(result);
+
+            console.log(value);
+            // HTTPレスポンスボディを出力する
+            res.write(JSON.stringify(value));
+            res.end();
+        },
         "postData": function () {
             req.on('data', function (data) {
                 data_string += data.toString('utf-8', 0, data.length); //バッファをstringに逐一変換
@@ -170,7 +189,7 @@ server.on('request', function (req, res) {
                 console.log(data_json.time);
 
                 //index:1はレイアウト
-                data_json["index"]=1;
+                data_json["index"] = 1;
 
                 //データをDBに保存
                 collection.insertOne(data_json);
@@ -192,7 +211,7 @@ server.on('request', function (req, res) {
                 console.log(data_json.time);
 
                 //index:2はgas
-                data_json["index"]=2;
+                data_json["index"] = 2;
 
                 //データをDBに保存
                 collection.insertOne(data_json);
@@ -232,6 +251,10 @@ server.on('request', function (req, res) {
     } else if (uri === "/get_value") {
         // URLが「IPアドレス/:1234/get_value」の場合、"getThree"の処理を行う
         Response["getValue"]();
+        return;
+    } else if (uri === "/get_gas") {
+        // URLが「IPアドレス/:1234/get_value」の場合、"getThree"の処理を行う
+        Response["getGas"]();
         return;
     } else if (uri === "/post_data") {
         // URLが「IPアドレス/:1234/post_data」の場合、"postData"の処理を行う

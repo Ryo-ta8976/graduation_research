@@ -57,6 +57,41 @@
         req.send(null); // HTTPリクエストの発行
       });
     }
+
+    function getGas() {
+      return new Promise((resolve, reject) => {
+        var req = new XMLHttpRequest();
+        //req.open("get", "http://192.168.50.226:1234/get_value", true); 
+        //req.open("get", "http://172.16.10.137:1234/get_value", true);
+        //req.open("get", "http://192.168.10.5:1234/get_value", true);
+        req.open("get", "http://192.168.100.108:1234/get_gas", true);
+
+        //受信が成功した時に呼び出されるイベント
+        req.onload = () => {
+          //通信が正常に終了したかを確認する
+          if (req.readyState === 4 && req.status === 200) {
+            //resolve(req.responseType);
+            resolve(req.response);
+          } else {
+            alert(req.status);
+            reject(new Error(req.statusText));
+          }
+        };
+        //受信が失敗した時に呼び出されるイベント
+        req.onerror = () => {
+          reject(new Error(req.statusText));
+        };
+        req.send(null); // HTTPリクエストの発行
+      });
+    }
+
+    function get_y() {
+      var value;
+      var gas = [];
+      value = await getGas();
+      value = JSON.parse(value);
+    }
+
     async function init() {
       var scene = new THREE.Scene();
       var renderer = new THREE.WebGLRenderer();
@@ -226,11 +261,11 @@
           xAxes: [{
             type: 'realtime',
             realtime: {
-              onRefresh: function (chart) {
+              onRefresh: async function (chart) {
                 chart.data.datasets.forEach(function (dataset) {
                   dataset.data.push({
                     x: Date.now(),
-                    y: Math.random()
+                    y: get_y()
                   });
                 });
               },
