@@ -22,7 +22,7 @@ labels = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°']
 with open('./ble_ave.csv') as f:
     reader = csv.reader(f)
     for row in reader:
-        values = row
+        values = float(row)
         print(values)
 
 print(type(values))
