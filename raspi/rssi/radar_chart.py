@@ -20,10 +20,9 @@ def plot_polar(labels, values, imgname):
 labels = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°']
 #values = [-71, -61, -78, -79, -81, -78, -77, -79]
 with open('./ble_ave.csv') as f:
-    reader = csv.reader(f)
+    reader = np.loadtxt(f, delimiter=',', dtype='float')
+    values = []
     for row in reader:
-        values = float(row)
-        print(values)
+        values.append(row)
 
-print(type(values))
 plot_polar(labels, values, "radar.png")
