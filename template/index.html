@@ -4,7 +4,10 @@
   <script type="text/javascript" src="js/three.js-master/build/three.min.js"></script>
   <script type="text/javascript" src="js/OrbitControls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+  <script type="text/javascript" src="js/node_modules/moment/moment.js"></script>
+  <script type="text/javascript" src="js/chartjs-plugin-streaming.js"></script>
   <link rel="stylesheet" href="css/index.css">
+  <meta charset="UTF-8">
 </head>
 
 <body>
@@ -19,6 +22,9 @@
   <div style="height:40%; width:40%; float: left; margin: 20px;">
     <canvas id="myLineChart2"></canvas>
   </div>
+  <div style="height:40%; width:40%; float: left; margin: 20px;">
+    <canvas id="myLineChart3"></canvas>
+  </div>
 
 
 
@@ -27,8 +33,10 @@
       //promiseを使うことで簡潔に記述できる
       return new Promise((resolve, reject) => { //resolveまたはrejectの結果を返す
         var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成、サーバと非同期通信するためのAPI
-        req.open("get", "http://192.168.50.226:1234/get_value", true); // アクセスするファイルを指定、falseは同期処理
+        //req.open("get", "http://192.168.50.226:1234/get_value", true); // アクセスするファイルを指定、falseは同期処理
         //req.open("get", "http://172.16.10.137:1234/get_value", true);
+        //req.open("get", "http://192.168.10.5:1234/get_value", true);
+        req.open("get", "http://192.168.100.108:1234/get_value", true);
         //req.setRequestHeader("Access-Control-Allow-Origin", "*");
         //受信が成功した時に呼び出されるイベント
         req.onload = () => {
@@ -190,6 +198,39 @@
         },
       }
     });
+
+
+
+var ctx = document.getElementById('myLineChart3').getContext('2d');
+
+var chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    datasets: [{
+      data: []
+    }, {
+      data: []
+    }]
+  },
+  options: {
+    scales: {
+      xAxes: [{
+        type: 'realtime',
+        realtime: {
+          onRefresh: function(chart) {
+            chart.data.datasets.forEach(function(dataset) {
+              dataset.data.push({
+                x: Date.now(),
+                y: Math.random()
+              });
+            });
+          }
+        }
+      }]
+    }
+  }
+});
+
   </script>
 </body>
 

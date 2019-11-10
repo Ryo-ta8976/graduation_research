@@ -100,6 +100,30 @@ server.on('request', function (req, res) {
                 res.end();
             });
         },
+        "getChartStreaming": function () {
+            var template = fs.readFile('./js/chartjs-plugin-streaming.js', 'utf-8', function (err, data) {
+                // HTTPレスポンスヘッダを出力する
+                res.writeHead(200, {
+                    'content-Type': 'text/javascript'
+                });
+
+                // HTTPレスポンスボディを出力する
+                res.write(data);
+                res.end();
+            });
+        },
+        "getMoment": function () {
+            var template = fs.readFile('./js/node_modules/moment/moment.js', 'utf-8', function (err, data) {
+                // HTTPレスポンスヘッダを出力する
+                res.writeHead(200, {
+                    'content-Type': 'text/javascript'
+                });
+
+                // HTTPレスポンスボディを出力する
+                res.write(data);
+                res.end();
+            });
+        },
         "getCSS": function () {
             var template = fs.readFile('./css/index.css', 'utf-8', function (err, data) {
                 // HTTPレスポンスヘッダを出力する
@@ -193,6 +217,14 @@ server.on('request', function (req, res) {
     } else if (uri === "/js/OrbitControls.js") {
         // URLが「IPアドレス/:1234/js/OrbitControls.js」の場合、"getOrbit"の処理を行う
         Response["getOrbit"]();
+        return;
+    } else if (uri === "/js/chartjs-plugin-streaming.js") {
+        // URLが「IPアドレス/:1234/js/chartjs-plugin-streaming.js」の場合、"getChartStreqming"の処理を行う
+        Response["getChartStreaming"]();
+        return;
+    } else if (uri === "/js/node_modules/moment/moment.js") {
+        // URLが「IPアドレス/:1234/js/node_modules/moment/moment.js」の場合、"getMoment"の処理を行う
+        Response["getMoment"]();
         return;
     } else if (uri === "/css/index.css") {
         Response["getCSS"]();
