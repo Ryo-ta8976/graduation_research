@@ -19,19 +19,20 @@ drone.connect(function () {
 
     setTimeout(function () {
       drone.stop();
-    }, 3000);
 
-    return "drone take off";
+      return "drone take off";
+    }, 3000);
   }
+
   async function f2(passVal) {
 
     drone.up(50);
 
     setTimeout(function () {
       drone.stop();
-    }, 3000);
 
-    return "drone up";
+      return "drone up";
+    }, 3000);
   }
 
   async function f3(passVal) {
