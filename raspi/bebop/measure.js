@@ -34,7 +34,7 @@ async function f2(passVal) {
 
 async function f3(passVal) {
   const execSync = require('child_process').execSync;
-  const result = execSync('raspistill -o ./pictuires/linear.jpg');
+  const result = execSync('raspistill -o linear.jpg');
   return "take a picture";
 }
 
