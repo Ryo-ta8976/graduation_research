@@ -33,8 +33,9 @@ async function f2(passVal) {
 }
 
 async function f3(passVal) {
-  console.log("#3: f3");
-  return Timeout("f3 ==> f4", Math.random() * 3000);
+  const execSync = require('child_process').execSync;
+  const result = execSync('raspistill -o ./pictuires/linear.jpg');
+  return "take a picture";
 }
 
 async function f4(passVal) {
