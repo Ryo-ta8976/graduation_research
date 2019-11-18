@@ -29,8 +29,10 @@ FULL_DELAY_HIGH = 0x0f
 FULL_DELAY_LOW = 0x10
 
 sum_degree = 0.0
+sum_deg = 0.0
 timeval = 0.001
 i = 0
+count_point = 0
 gyro_z = []
 rotation_degree = []
 dist = []
@@ -91,19 +93,34 @@ def get_dist():
     return dist
 
 
-for i in range(500):
-    value = get_dist()
+# for i in range(500):
+#     value = get_dist()
 
+#     z = get_gyro_data_deg()
+#     t_after = time.time()
+#     elapsed_time = t_after-t_before
+#     t_before = t_after
+#     gyro_z.append(z)
+
+#     dist.append(value)
+#     rotation_degree.append(z*elapsed_time)
+
+#     sleep(timeval)
+
+while(1):
+    value = get_dist()
     z = get_gyro_data_deg()
+    sum_deg += z
     t_after = time.time()
     elapsed_time = t_after-t_before
     t_before = t_after
     gyro_z.append(z)
-
     dist.append(value)
     rotation_degree.append(z*elapsed_time)
-
     sleep(timeval)
+    count_point += 1
+    if (sum_deg > 360):
+        break
 
 
 # file=open('test_lidar_time.csv','w')
@@ -123,6 +140,7 @@ for i in range(500):
 data = cl.OrderedDict()
 data["dist"] = dist
 data["rot"] = rot
+data["count"] = count_point
 data = json.dumps(data)  # objectからstringに変換
 url = 'http://192.168.10.3:1234/post_data'
 #url = 'http://172.16.10.137:1234/post_data'
