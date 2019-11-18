@@ -108,27 +108,20 @@
       var value;
       var dis = [];
       var rot = [];
+      var count_point;
       //dis,rot = await getCSV();
       value = await getValue();
       value = JSON.parse(value);
       console.log(value);
       dis = value.dist;
       rot = value.rot;
-      //dis=value[0].dist;
-      //rot=value[0].rot;
-      // for(var i=0;i<1000;i++){
-      //   geometry.vertices[i]= new THREE.Vector3((data[i][0] * Math.cos( data[i][1] * (Math.PI / 180) ))/2,
-      //                                             0,
-      //                                             (data[i][0] * Math.sin( data[i][1] * (Math.PI / 180) ))/2);
-      // }
+      count_point = value.count;
+
       //形状オブジェクトの宣言と生成
       var geometry = new THREE.Geometry();
-      for (var i = 0; i < 2000; i++) {
+      for (var i = 0; i < count_point; i++) {
         var x = (dis[i] * Math.cos(rot[i] * (Math.PI / 180))) / 2;
         var y = (dis[i] * Math.sin(rot[i] * (Math.PI / 180))) / 2;
-        //alert(x);
-        //alert(y);
-        //geometry.vertices[i]= new THREE.Vector3(x,0,y);
         geometry.vertices.push(new THREE.Vector3(x, 0, y));
       }
       //材質オブジェクトの宣言と生成

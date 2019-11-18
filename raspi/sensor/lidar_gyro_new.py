@@ -125,9 +125,8 @@ while(1):
 
 # file=open('test_lidar_time.csv','w')
 
-sum = 0
 rot = []
-for i in range(500):
+for i in range(count_point):
     sum_degree = sum_degree+rotation_degree[i]
     rot.append(sum_degree)
     #file.write("%d,%08.3f\n" % (dist[i],sum_degree) )
