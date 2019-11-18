@@ -32,6 +32,17 @@ drone.connect(function () {
   }, 15000);
 
   setTimeout(function () {
+    drone.counterClockwise(100);
+    console.log("turn");
+
+    var pyshell = new PythonShell('../opencv/hough.py');
+    pyshell.on('message', function (data) {
+      console.log(data);
+    });
+    console.log("hough did");
+  }, 20000);
+
+  setTimeout(function () {
     drone.land();
   }, 5000);
 });
