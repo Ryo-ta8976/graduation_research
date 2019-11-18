@@ -1,4 +1,5 @@
 var bebop = require('node-bebop');
+var { PythonShell } = require('python-shell');
 
 var drone = bebop.createClient();
 
@@ -21,6 +22,14 @@ drone.connect(function () {
     const result = execSync('raspistill -o linear.jpg');
     console.log("take a picture");
   }, 10000);
+
+  setTimeout(function () {
+    var pyshell = new PythonShell('../opencv/hough.py');
+    pyshell.on('message', function (data) {
+      console.log(data);
+    });
+    console.log("hough did");
+  }, 15000);
 
   setTimeout(function () {
     drone.land();
