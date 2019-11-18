@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 
-img = cv2.imread("./pictures/led_small.png")
+img = cv2.imread("../opencv/pictures/led_small.png")
 
 # グレースケールに変換する。
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
