@@ -110,13 +110,15 @@ def get_dist():
 while(1):
     value = get_dist()
     z = get_gyro_data_deg()
-    sum_deg += z
+
     t_after = time.time()
     elapsed_time = t_after-t_before
     t_before = t_after
     gyro_z.append(z)
     dist.append(value)
-    rotation_degree.append(z*elapsed_time)
+    actual_rotation = z * elapsed_time
+    rotation_degree.append(actual_rotation)
+    sum_deg += actual_rotation
     sleep(timeval)
     count_point += 1
     if (sum_deg > 360):
@@ -130,10 +132,6 @@ for i in range(count_point):
     sum_degree = sum_degree+rotation_degree[i]
     rot.append(sum_degree)
     #file.write("%d,%08.3f\n" % (dist[i],sum_degree) )
-    print('No. %d' % i)
-    print("distance: %d" % dist[i])
-    print('degree: %08.3f' % sum_degree)
-    print('\n')
 
 # ys=cl.OrderedDict()
 data = cl.OrderedDict()
@@ -144,10 +142,3 @@ data = json.dumps(data)  # objectからstringに変換
 url = 'http://192.168.10.3:1234/post_data'
 #url = 'http://172.16.10.137:1234/post_data'
 result = requests.post(url, data)
-# ys=data
-
-
-# fw=open('test.json','w')
-# json.dump(ys,fw,indent=3)
-
-# file.close()
