@@ -15,13 +15,13 @@ drone.connect(function () {
   setTimeout(function () {
     drone.stop();
     console.log("drone stop");
-  }, 7000);
+  }, 10000);
 
   setTimeout(function () {
-    const execSync = require('child_process').execSync;
-    const result = execSync('raspistill -o linear.jpg');
+    //const execSync = require('child_process').execSync;
+    //const result = execSync('raspistill -o linear.jpg');
     console.log("take a picture");
-  }, 10000);
+  }, 15000);
 
   setTimeout(function () {
     var pyshell = new PythonShell('../opencv/hough.py');
@@ -29,7 +29,7 @@ drone.connect(function () {
       console.log(data);
     });
     console.log("hough did");
-  }, 15000);
+  }, 20000);
 
   setTimeout(function () {
     drone.counterClockwise(100);
@@ -40,13 +40,13 @@ drone.connect(function () {
     //   console.log(data);
     // });
     // console.log("hough did");
-  }, 20000);
-
-  setTimeout(function () {
-    drone.stop();
   }, 25000);
 
   setTimeout(function () {
+    drone.stop();
+  }, 30000);
+
+  setTimeout(function () {
     drone.land();
-  }, 28000);
+  }, 32000);
 });
