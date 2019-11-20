@@ -24,8 +24,8 @@ drone.connect(function () {
   }, 15000);
 
   setTimeout(function () {
-    var pyshell = new PythonShell('../opencv/hough.py');
-    pyshell.on('message', function (data) {
+    var pyshell_1 = new PythonShell('../opencv/hough.py');
+    pyshell_1.on('message', function (data) {
       console.log(data);
     });
     console.log("hough did");
@@ -33,10 +33,11 @@ drone.connect(function () {
 
   setTimeout(function () {
     drone.counterClockwise(100);
-    console.log("turn");
+    console.log("turning");
 
-    var pyshell = new PythonShell('../opencv/lidar_gyro_new.py');
-    pyshell.on('message', function (data) {
+    var pyshell_2 = new PythonShell('../sensor/lidar_gyro_new.py');
+    pyshell_2.on('message', function (data) {
+	console.log(data);
       if (data == "stop") {
         drone.stop();
         console.log("stop now");
@@ -44,6 +45,7 @@ drone.connect(function () {
         console.log(data);
       }
     });
+	console.log("mesuring");
 
   }, 25000);
 
