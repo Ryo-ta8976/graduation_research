@@ -255,10 +255,22 @@
             type: 'realtime',
             realtime: {
               onRefresh: async function (chart) {
-                chart.data.datasets.forEach(function (dataset) {
+                chart.data.datasets[0].forEach(function (dataset) {
                   dataset.data.push({
                     x: Date.now(),
-                    y: get_y()
+                    y: 0
+                  });
+                });
+                chart.data.datasets[1].forEach(function (dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: 1
+                  });
+                });
+                chart.data.datasets[2].forEach(function (dataset) {
+                  dataset.data.push({
+                    x: Date.now(),
+                    y: 2
                   });
                 });
               },
