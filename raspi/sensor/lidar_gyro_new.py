@@ -122,6 +122,7 @@ while(1):
     sleep(timeval)
     count_point += 1
     if (sum_deg > 360):
+        print("stop")
         break
 
 
@@ -139,6 +140,7 @@ data["dist"] = dist
 data["rot"] = rot
 data["count"] = count_point
 data = json.dumps(data)  # objectからstringに変換
+print("send data")
 url = 'http://192.168.10.3:1234/post_data'
 #url = 'http://172.16.10.137:1234/post_data'
 result = requests.post(url, data)

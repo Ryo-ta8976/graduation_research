@@ -35,18 +35,23 @@ drone.connect(function () {
     drone.counterClockwise(100);
     console.log("turn");
 
-    // var pyshell = new PythonShell('../opencv/hough.py');
-    // pyshell.on('message', function (data) {
-    //   console.log(data);
-    // });
-    // console.log("hough did");
+    var pyshell = new PythonShell('../opencv/lidar_gyro_new.py');
+    pyshell.on('message', function (data) {
+      if (data == "stop") {
+        drone.stop();
+        console.log("stop now");
+      } else {
+        console.log(data);
+      }
+    });
+
   }, 25000);
 
   setTimeout(function () {
     drone.stop();
-  }, 30000);
+  }, 35000);
 
   setTimeout(function () {
     drone.land();
-  }, 32000);
+  }, 40000);
 });
