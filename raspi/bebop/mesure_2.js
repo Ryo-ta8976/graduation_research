@@ -37,7 +37,6 @@ drone.connect(function () {
 
     var pyshell_2 = new PythonShell('../sensor/lidar_gyro_new.py');
     pyshell_2.on('message', function (data) {
-	console.log(data);
       if (data == "stop") {
         drone.stop();
         console.log("stop now");
@@ -45,7 +44,7 @@ drone.connect(function () {
         console.log(data);
       }
     });
-	console.log("mesuring");
+    console.log("mesuring");
 
   }, 25000);
 
