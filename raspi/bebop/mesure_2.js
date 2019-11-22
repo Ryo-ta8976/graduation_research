@@ -8,14 +8,19 @@ drone.connect(function () {
   console.log("drone take off");
 
   setTimeout(function () {
+    drone.stop();
+    console.log("drone stop");
+  }, 5000);
+
+  setTimeout(function () {
     drone.up();
     console.log("drone up");
-  }, 5000);
+  }, 8000);
 
   setTimeout(function () {
     drone.stop();
     console.log("drone stop");
-  }, 10000);
+  }, 13000);
 
   setTimeout(function () {
     //const execSync = require('child_process').execSync;
@@ -40,6 +45,7 @@ drone.connect(function () {
       if (data == "stop") {
         drone.stop();
         console.log("stop now");
+	drone.land();
       } else {
         console.log(data);
       }

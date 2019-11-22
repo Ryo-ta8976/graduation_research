@@ -121,7 +121,8 @@ while(1):
     sum_deg += actual_rotation
     sleep(timeval)
     count_point += 1
-    if (sum_deg > 360):
+    print(sum_deg)
+    if (sum_deg > 300):
         print("stop")
         break
 
