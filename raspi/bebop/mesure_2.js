@@ -23,8 +23,8 @@ drone.connect(function () {
   }, 13000);
 
   setTimeout(function () {
-    //const execSync = require('child_process').execSync;
-    //const result = execSync('raspistill -o linear.jpg');
+    const execSync = require('child_process').execSync;
+    const result = execSync('raspistill -o linear.jpg');
     console.log("take a picture");
   }, 15000);
 
@@ -47,7 +47,7 @@ drone.connect(function () {
         console.log("stop now");
 	drone.land();
       } else {
-        console.log(data);
+        //console.log(data);
       }
     });
     console.log("mesuring");
