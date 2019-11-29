@@ -2,6 +2,8 @@ var bebop = require('node-bebop');
 var { PythonShell } = require('python-shell');
 
 var drone = bebop.createClient();
+var actual_rotation_agree_1;
+var actual_rotation_agree_2;
 
 drone.connect(function () {
   drone.takeOff();
@@ -32,6 +34,7 @@ drone.connect(function () {
     var pyshell_1 = new PythonShell('../opencv/hough.py');
     pyshell_1.on('message', function (data) {
       console.log(data);
+      actual_rotation_agree_1 = data;
     });
     console.log("hough did");
   }, 20000);
@@ -45,7 +48,7 @@ drone.connect(function () {
       if (data == "stop") {
         drone.stop();
         console.log("stop now");
-	drone.land();
+        //drone.land();
       } else {
         //console.log(data);
       }
@@ -53,6 +56,21 @@ drone.connect(function () {
     console.log("mesuring");
 
   }, 25000);
+
+  setTimeout(function () {
+    const execSync = require('child_process').execSync;
+    const result = execSync('raspistill -o linear.jpg');
+    console.log("take a picture");
+  }, 35000);
+
+  setTimeout(function () {
+    var pyshell_1 = new PythonShell('../opencv/hough.py');
+    pyshell_1.on('message', function (data) {
+      console.log(data);
+      actual_rotation_agree_1 = data;
+    });
+    console.log("hough did");
+  }, 40000);
 
   setTimeout(function () {
     drone.stop();
