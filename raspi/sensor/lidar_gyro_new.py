@@ -7,6 +7,7 @@ import numpy as np
 import json
 import collections as cl
 import requests
+import sys
 
 
 # slave address
@@ -135,13 +136,16 @@ for i in range(count_point):
     rot.append(sum_degree)
     #file.write("%d,%08.3f\n" % (dist[i],sum_degree) )
 
-# ys=cl.OrderedDict()
-data = cl.OrderedDict()
-data["dist"] = dist
-data["rot"] = rot
-data["count"] = count_point
-data = json.dumps(data)  # objectからstringに変換
-print("send data")
-url = 'http://192.168.10.3:1234/post_data'
-#url = 'http://172.16.10.137:1234/post_data'
-result = requests.post(url, data)
+error_degree = sys.stdin.readline()
+if (error_degree != None):
+    # ys=cl.OrderedDict()
+    data = cl.OrderedDict()
+    data["dist"] = dist
+    data["rot"] = rot
+    data["count"] = count_point
+    data["error_degree"] = error_degree
+    data = json.dumps(data)  # objectからstringに変換
+    print("send data")
+    url = 'http://192.168.10.3:1234/post_data'
+    #url = 'http://172.16.10.137:1234/post_data'
+    result = requests.post(url, data)

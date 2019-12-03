@@ -2,8 +2,8 @@ var bebop = require('node-bebop');
 var { PythonShell } = require('python-shell');
 
 var drone = bebop.createClient();
-var actual_rotation_agree_1;
-var actual_rotation_agree_2;
+var mesure_rotation_degree_1;
+var mesure_rotation_degree_2;
 
 drone.connect(function () {
   drone.takeOff();
@@ -31,10 +31,10 @@ drone.connect(function () {
   }, 15000);
 
   setTimeout(function () {
-    var pyshell_1 = new PythonShell('../opencv/hough.py');
-    pyshell_1.on('message', function (data) {
+    var pyshell = new PythonShell('../opencv/hough.py');
+    pyshell.on('message', function (data) {
       console.log(data);
-      actual_rotation_agree_1 = data;
+      mesure_rotation_degree_1 = data;
     });
     console.log("hough did");
   }, 20000);
@@ -43,8 +43,8 @@ drone.connect(function () {
     drone.counterClockwise(100);
     console.log("turning");
 
-    var pyshell_2 = new PythonShell('../sensor/lidar_gyro_new.py');
-    pyshell_2.on('message', function (data) {
+    var pyshell_layout = new PythonShell('../sensor/lidar_gyro_new.py');
+    pyshell_layout.on('message', function (data) {
       if (data == "stop") {
         drone.stop();
         console.log("stop now");
@@ -64,13 +64,20 @@ drone.connect(function () {
   }, 35000);
 
   setTimeout(function () {
-    var pyshell_1 = new PythonShell('../opencv/hough.py');
-    pyshell_1.on('message', function (data) {
+    var pyshell = new PythonShell('../opencv/hough.py');
+    pyshell.on('message', function (data) {
       console.log(data);
-      actual_rotation_agree_1 = data;
+      mesure_rotation_degree_2 = data;
     });
     console.log("hough did");
   }, 40000);
+
+  setTimeout(function () {
+    var error_degree = mesure_rotation_degree_1 - mesure_rotation_degree_2;
+    pyshell_layout.send(error_degree);
+
+    console.log("error_degree send");
+  }, 45000);
 
   setTimeout(function () {
     drone.stop();
