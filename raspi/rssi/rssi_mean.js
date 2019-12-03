@@ -7,6 +7,35 @@ var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
 var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
 var count = 0;
 
+// 合計値の計算
+function calcSum(data) {
+  var sum = 0;
+  for (i = 0; i < data.length; i++) {
+    sum = sum + data[i];
+  }
+  return (sum);
+}
+
+// 平均値の計算
+function calcAve(data) {
+  return (calcSum(data) / data.length);
+}
+
+// 分散の計算
+function calcVar(data) {
+  var ave = calcAve(data);    // 平均値
+  var varia = 0;
+  for (i = 0; i < data.length; i++) {
+    varia = varia + Math.pow(data[i] - ave, 2);
+  }
+  return (varia / data.length);
+}
+
+// 標準偏差の計算
+function calcStd(data) {
+  return Math.sqrt(calcVar(data));    // 分散の平方根
+}
+
 //start ble
 noble.on('stateChange', function (state) {
   if (state === 'poweredOn') {
@@ -45,6 +74,7 @@ noble.on('discover', function (peripheral) {
       let ave = sum / 10;
       ave = (-1) * ave;
       console.log(ave);
+      console.log(calcStd(res[0]));
       fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
       });
       fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
