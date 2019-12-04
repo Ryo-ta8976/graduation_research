@@ -7,10 +7,6 @@ var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
 var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
 var count = 0;
 
-function compareFunc(a, b) {
-  return a - b;
-}
-
 //start ble
 noble.on('stateChange', function (state) {
   if (state === 'poweredOn') {
@@ -43,12 +39,17 @@ noble.on('discover', function (peripheral) {
       let array = [];
 
       array = res[0];
-      array.sort(compareFunc);
+      array=array.map(Number);
+      array.sort(
+  	function(a,b){
+    		return (a < b ? -1 : 1);
+  	}
+      );
 
       let sum = 0;
 
       for (i = 1; i < 10; i++) {
-        sum += res[0][i];
+        sum += array[i];
       }
 
       let ave = sum / 9;
