@@ -31,7 +31,7 @@ noble.on('discover', function (peripheral) {
     noble.stopScanning();
     fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
     });
-    if (count < 10) {
+    if (count < 20) {
       noble.startScanning();
     } else {
       let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
@@ -46,7 +46,7 @@ noble.on('discover', function (peripheral) {
           return (a < b ? -1 : 1);
         }
       );
-      let ave = (array[4] + array[5]) / 2;
+      let ave = (array[9] + array[10]) / 2;
 
       console.log(ave);
       fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {

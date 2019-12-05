@@ -31,7 +31,7 @@ noble.on('discover', function (peripheral) {
     noble.stopScanning();
     fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
     });
-    if (count < 10) {
+    if (count < 20) {
       noble.startScanning();
     } else {
       let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
@@ -39,15 +39,20 @@ noble.on('discover', function (peripheral) {
       let array = [];
 
       array = res[0];
-      console.log(array);
       array = array.map(Number);
       array.sort(
         function (a, b) {
           return (a < b ? -1 : 1);
         }
       );
-      let ave = (array[4] + array[5]) / 2;
 
+      let sum = 0;
+
+      for (i = 1; i < 20; i++) {
+        sum += array[i];
+      }
+
+      let ave = sum / 19;
       console.log(ave);
       fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
       });

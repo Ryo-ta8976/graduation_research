@@ -39,14 +39,14 @@ noble.on('discover', function (peripheral) {
       let array = [];
 
       array = res[0];
-	array=array.map(Number);
+      array = array.map(Number);
       array.sort(
-  	function(a,b){
-    		return (a < b ? -1 : 1);
-  	}
+        function (a, b) {
+          return (a < b ? -1 : 1);
+        }
       );
 
-	let ave=array[9];
+      let ave = array[9];
       console.log(ave);
       fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
       });
