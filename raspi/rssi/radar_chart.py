@@ -19,7 +19,7 @@ def plot_polar(labels, values, imgname):
 
 labels = ['0°', '45°', '90°', '135°', '180°', '225°', '270°', '315°']
 #values = [-71, -61, -78, -79, -81, -78, -77, -79]
-with open('./ble_ave_mean_minmaxDelete.csv') as f:
+with open('./ble_ave_mean_20.csv') as f:
     reader = np.loadtxt(f, delimiter=',', dtype='float')
     values = []
     for row in reader:
