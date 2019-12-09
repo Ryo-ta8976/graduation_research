@@ -17,6 +17,7 @@ drone.connect(function () {
     console.log("drone stop");
   }, 5000);
 
+  //上昇
   setTimeout(function () {
     drone.up();
     console.log("drone up");
@@ -27,6 +28,7 @@ drone.connect(function () {
     console.log("drone stop");
   }, 13000);
 
+  //カメラ撮影
   setTimeout(function () {
     startTime = perfomance.now();
     const execSync = require('child_process').execSync;
@@ -35,6 +37,7 @@ drone.connect(function () {
     console.log("take a picture: %f", endTime - startTime);
   }, 15000);
 
+  //Hough変換
   setTimeout(function () {
     startTime = perfomance.now();
     var pyshell = new PythonShell('../opencv/hough.py');
@@ -46,6 +49,7 @@ drone.connect(function () {
     });
   }, 20000);
 
+  //レイアウト計測
   setTimeout(function () {
     drone.counterClockwise(100);
     console.log("turning");
@@ -66,12 +70,14 @@ drone.connect(function () {
 
   }, 25000);
 
+  //カメラ撮影
   setTimeout(function () {
     const execSync = require('child_process').execSync;
     const result = execSync('raspistill -o linear.jpg');
     console.log("take a picture");
   }, 35000);
 
+  //Hough変換
   setTimeout(function () {
     var pyshell = new PythonShell('../opencv/hough.py');
     pyshell.on('message', function (data) {
@@ -81,6 +87,7 @@ drone.connect(function () {
     console.log("hough did");
   }, 40000);
 
+  //角度補正計算
   setTimeout(function () {
     startTime = perfomance.now();
     var error_degree = mesure_rotation_degree_1 - mesure_rotation_degree_2;
