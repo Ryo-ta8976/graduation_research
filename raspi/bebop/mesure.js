@@ -44,10 +44,13 @@ drone.connect(function () {
     startTime = performance.now();
     var pyshell = new PythonShell('../opencv/hough.py');
     pyshell.on('message', function (data) {
-      console.log(data);
-      mesure_rotation_degree_1 = data;
-      endTime = performance.now();
-      console.log("hough did: %f", endTime - startTime);
+      if (data == "error") {
+        mesure_rotation_degree_1 = 1;
+      } else {
+        console.log(data);
+        mesure_rotation_degree_1 = data;
+        console.log("hough did: %f", endTime - startTime);
+      }
     });
   }, 20000);
 
@@ -83,11 +86,15 @@ drone.connect(function () {
   setTimeout(function () {
     var pyshell = new PythonShell('../opencv/hough.py');
     pyshell.on('message', function (data) {
-      console.log(data);
-      mesure_rotation_degree_2 = data;
-	console.log("hogh did");
+      if (data == "error") {
+        mesure_rotation_degree_2 = 2;
+      } else {
+        console.log(data);
+        mesure_rotation_degree_2 = data;
+        console.log("hogh did");
+      }
     });
-    
+
   }, 40000);
 
   //角度補正計算
@@ -97,7 +104,7 @@ drone.connect(function () {
     pyshell.send(error_degree);
     endTime = performance.now();
 
-	pyshell.on('message', function (data) {
+    pyshell.on('message', function (data) {
       console.log(data);
     });
 

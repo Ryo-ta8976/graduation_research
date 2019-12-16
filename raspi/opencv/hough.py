@@ -18,26 +18,30 @@ count = 0
 sum_theta = 0
 
 # ハフ変換で直線検出する。
-lines = cv2.HoughLines(edges, 1, pi / 180, 280)
-for line in lines:
-    for rho, theta in line:
-        a = np.cos(theta)
-        b = np.sin(theta)
-        x0 = a*rho
-        y0 = b*rho
-        x1 = int(x0 + 4000*(-b))
-        y1 = int(y0 + 4000*(a))
-        x2 = int(x0 - 4000*(-b))
-        y2 = int(y0 - 4000*(a))
+try:
+    lines = cv2.HoughLines(edges, 1, pi / 180, 280)
+    for line in lines:
+        for rho, theta in line:
+            a = np.cos(theta)
+            b = np.sin(theta)
+            x0 = a*rho
+            y0 = b*rho
+            x1 = int(x0 + 4000*(-b))
+            y1 = int(y0 + 4000*(a))
+            x2 = int(x0 - 4000*(-b))
+            y2 = int(y0 - 4000*(a))
 
-        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-        radian = math.atan2(y2-y1, x2-x1)
-        theta = radian * 180 / pi
-        count += 1
-        sum_theta += theta
-        # print(theta)
+            cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+            radian = math.atan2(y2-y1, x2-x1)
+            theta = radian * 180 / pi
+            count += 1
+            sum_theta += theta
+            # print(theta)
 
-ave_theta = sum_theta / count
-print(ave_theta)
+    ave_theta = sum_theta / count
+    print(ave_theta)
+
+except:
+    print("error")
 
 cv2.imwrite('./pictures/result_hough.png', img)
