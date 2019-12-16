@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import math
 
-img = cv2.imread("./image4.jpg")
+img = cv2.imread("./linear.jpg")
 
 # グレースケールに変換する。
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

@@ -9,6 +9,7 @@ var mesure_rotation_degree_1;
 var mesure_rotation_degree_2;
 var startTime;
 var endTime;
+var pyshell_layout;
 
 drone.connect(function () {
   drone.takeOff();
@@ -57,7 +58,7 @@ drone.connect(function () {
     console.log("turning");
 
     startTime = performance.now();
-    var pyshell_layout = new PythonShell('../sensor/lidar_gyro_new.py');
+    pyshell_layout = new PythonShell('../sensor/lidar_gyro_new.py');
     pyshell_layout.on('message', function (data) {
       if (data == "stop") {
         drone.stop();
@@ -94,10 +95,10 @@ drone.connect(function () {
   setTimeout(function () {
     startTime = performance.now();
     var error_degree = mesure_rotation_degree_1 - mesure_rotation_degree_2;
-    pyshell.send(error_degree);
+    pyshell_layout.send(error_degree);
     endTime = performance.now();
 
-	pyshell.on('message', function (data) {
+	pyshell_layout.on('message', function (data) {
       console.log(data);
     });
 

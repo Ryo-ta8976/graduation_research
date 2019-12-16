@@ -146,6 +146,7 @@ if (error_degree != None):
     data["error_degree"] = error_degree
     data = json.dumps(data)  # objectからstringに変換
     print("send data")
-    url = 'http://192.168.10.3:1234/post_data'
+    #url = 'http://192.168.10.3:1234/post_data'
+    url = 'http://192.168.42.58:1234/post_data'
     #url = 'http://172.16.10.137:1234/post_data'
     result = requests.post(url, data)
