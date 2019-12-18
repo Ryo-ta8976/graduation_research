@@ -45,6 +45,7 @@ drone.connect(function () {
     startTime = performance.now();
     var pyshell = new PythonShell('../opencv/hough.py');
     pyshell.on('message', function (data) {
+      console.log(data);
       if (data == "error") {
         mesure_rotation_degree_1 = 1;
       } else {
@@ -63,13 +64,12 @@ drone.connect(function () {
     startTime = performance.now();
     pyshell_layout = new PythonShell('../sensor/lidar_gyro_new.py');
     pyshell_layout.on('message', function (data) {
+      console.log(data);
       if (data == "stop") {
         drone.stop();
         endTime = performance.now();
         console.log("stop now: %f", endTime - startTime);
         //drone.land();
-      } else {
-        //console.log(data);
       }
     });
     console.log("mesuring");
@@ -106,7 +106,7 @@ drone.connect(function () {
     endTime = performance.now();
 
 
-	pyshell_layout.on('message', function (data) {
+    pyshell_layout.on('message', function (data) {
       console.log(data);
     });
 

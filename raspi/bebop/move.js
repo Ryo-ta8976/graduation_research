@@ -11,6 +11,7 @@ var endTime;
 var rssi_array = [];
 
 drone.connect(function () {
+  drone.takeOff();
 
   //スリープ関数
   var wait = (sec) => {
@@ -108,7 +109,7 @@ drone.connect(function () {
           console.log("end")
           drone.land();
 
-          break;
+          return false;
         }
       });
 

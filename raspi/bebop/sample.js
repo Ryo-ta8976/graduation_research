@@ -1,19 +1,15 @@
-var bebop=require('node-bebop');
+var bebop = require('node-bebop');
 
-var drone=bebop.createClient();
+var drone = bebop.createClient();
 
-drone.connect(function() {
+drone.connect(function () {
 	drone.takeOff();
 
-	setTimeout(function() {
-		drone.stop();
-	},5000);
-
-	setTimeout(function() {
+	setTimeout(function () {
 		drone.up();
-	},10000);
+	}, 5000);
 
-	setTimeout(function() {
+	setTimeout(function () {
 		drone.land();
-	},20000);
+	}, 15000);
 });
