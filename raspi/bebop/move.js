@@ -13,8 +13,10 @@ var rssi_array = [];
 drone.connect(() => {
   //離陸
   var takeOff = () => {
-    drone.takeOff()
-    wait(5)
+    	drone.takeOff()
+    	wait(5).then(()=>{
+	    	return
+	})
   };
 
   //スリープ関数

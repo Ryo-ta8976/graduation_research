@@ -6,12 +6,12 @@ drone.connect(function () {
   drone.takeOff();
 
   setTimeout(function () {
-    drone.forward(20);
-  }, 2000);
+    drone.forward(30);
+  }, 5000);
 
   setTimeout(function () {
     drone.stop();
-  }, 7000);
+  }, 8000);
 
   setTimeout(function () {
     drone.land();
