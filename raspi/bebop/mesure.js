@@ -22,14 +22,14 @@ drone.connect(function () {
 
   //上昇
   setTimeout(function () {
-    drone.up();
+    drone.up(100);
     console.log("drone up");
   }, 8000);
 
   setTimeout(function () {
     drone.stop();
     console.log("drone stop");
-  }, 13000);
+  }, 11000);
 
   //カメラ撮影
   setTimeout(function () {

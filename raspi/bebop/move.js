@@ -2,7 +2,7 @@ const performance = require('perf_hooks').performance;
 
 const startTime_all = performance.now();
 var bebop = require('node-bebop');
-var { PythonShell } = require('python-shell');
+var PythonShell = require('python-shell');
 var rssi = require('../rssi/rssi.js');
 
 var drone = bebop.createClient();
@@ -10,7 +10,7 @@ var startTime;
 var endTime;
 var rssi_array = [];
 
-drone.connect(function () {
+drone.connect(() => {
   drone.takeOff();
 
   //スリープ関数
@@ -82,7 +82,7 @@ drone.connect(function () {
       return new Promise((resolve) => {
         let forwarding_time = 2;
 
-        drone.forward(100);
+        drone.forward(20);
         console.log("forwarding");
 
         setTimeout(() => {

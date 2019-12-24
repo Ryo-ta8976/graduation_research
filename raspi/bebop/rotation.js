@@ -15,9 +15,9 @@ drone.connect(function () {
 
   setTimeout(function () {
     drone.stop();
-  }, 15000);
+  }, 13000);
 
   setTimeout(function () {
     drone.land();
-  }, 17000);
+  }, 15000);
 });
