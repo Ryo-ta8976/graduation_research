@@ -11,7 +11,11 @@ var endTime;
 var rssi_array = [];
 
 drone.connect(() => {
-  drone.takeOff();
+  //離陸
+  var takeOff = () => {
+    drone.takeOff()
+    wait(5)
+  };
 
   //スリープ関数
   var wait = (sec) => {
@@ -22,23 +26,25 @@ drone.connect(() => {
     }
   };
 
-  let mesure_rssi = new Promise((resolve) => { // 電波強度計測
-    for (var i = 0; i < 8; i++) {
-      rssi_array.push(rssi.ave).then(
-        drone.counterClockwise(100).then(
-          wait(1)
-        ).then(
-          drone.stop()
-        )
-      )
-    }
-    resolve('end mesure_rssi')
-  })
-
   while (1) {
-    mesure_rssi.then((msg) => { // 回転させる角度の計算
+    takeOff.then(() => {
+      // 電波強度計測
+      return new Promise((resolve) => {
+        for (var i = 0; i < 8; i++) {
+          rssi_array.push(rssi.ave).then(
+            drone.counterClockwise(100).then(
+              wait(1)
+            ).then(
+              drone.stop()
+            )
+          )
+        }
+        resolve('end mesure_rssi')
+      })
+    }).then((msg) => {
       console.log(msg)
 
+      // 回転させる角度の計算
       return new Promise((resolve) => {
         var temp_array = [];
 
@@ -64,7 +70,8 @@ drone.connect(() => {
 
         resolve(rotate_bebop);
       })
-    }).then((rotate_bebop) => { // bebopの回転
+    }).then((rotate_bebop) => {
+      // bebopの回転
       return new Promise((resolve) => {
         let rotate_time = 1;
 
@@ -76,9 +83,10 @@ drone.connect(() => {
           resolve("drone stop")
         }, rotate_bebop * rotate_time);
       })
-    }).then((msg) => { // bebopの直進
+    }).then((msg) => {
       console.log(msg)
 
+      // bebopの直進
       return new Promise((resolve) => {
         let forwarding_time = 2;
 
@@ -90,9 +98,10 @@ drone.connect(() => {
           resolve("drone stop")
         }, forwarding_time);
       })
-    }).then((msg) => { //真下方向の撮影
+    }).then((msg) => {
       console.log(msg)
 
+      //真下方向の撮影
       return new Promise((resolve) => {
         const execSync = require('child_process').execSync;
         const result = execSync('raspistill -o linear.jpg');
@@ -101,6 +110,7 @@ drone.connect(() => {
     }).then((msg) => {
       console.log(msg)
 
+      //線形検出
       var pyshell = new PythonShell('../opencv/hough.py');
       pyshell.on('message', function (data) {
         if (data == "error") {
