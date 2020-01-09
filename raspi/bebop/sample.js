@@ -6,7 +6,7 @@ drone.connect(function () {
 	drone.takeOff();
 
 	setTimeout(function () {
-		drone.up(100);
+		drone.up(10);
 	}, 2000);
 
 	setTimeout(function () {

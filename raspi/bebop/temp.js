@@ -18,12 +18,12 @@ function get_rssi() {
   })
 }
 
-drone.connect(() => {
+drone.connect(function() {
   //離陸
   drone.takeOff();
   console.log("drone take off");
 
-  while (1) {
+ // while (1) {
     setTimeout(function () {
       return new Promise((resolve) => {
         for (var i = 0; i < 8; i++) {
@@ -125,6 +125,6 @@ drone.connect(() => {
       });
 
     }, 65000);
-  }
+  //}
 
 });
