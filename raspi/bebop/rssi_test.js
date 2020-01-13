@@ -7,6 +7,7 @@ var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
 var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
 var count = 0;
 
+var rssi_array = [];
 
 function get_rssi() {
   return new Promise((resolve) => {
@@ -61,6 +62,8 @@ function get_rssi() {
           // console.log(ave);
           // fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
           // });
+		//
+	  console.log(array[9]);
           resolve(array[9]);
           fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
         }
