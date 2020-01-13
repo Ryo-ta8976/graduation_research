@@ -1,6 +1,6 @@
 var noble = require('noble');
 var fs = require('fs');
-const csvSync = require('csv-parse/lib/sync');
+//const csvSync = require('csv-parse/lib/sync');
 
 var DEVICE_NAME = "ble_koji";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
@@ -38,17 +38,18 @@ function get_rssi() {
         count++;
         console.log("device find");
         noble.stopScanning();
-        fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
-        });
+        let array = [];
+        array.push(peripheral.rssi);
+        // fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
+        // });
         if (count < 10) {
           noble.startScanning();
         } else {
-          let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
-          let res = csvSync(data);
-          let array = [];
+          //let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+          //let res = csvSync(data);    
 
-          array = res[0];
-          array = array.map(Number);
+          //array = res[0];
+          //array = array.map(Number);
           array.sort(
             function (a, b) {
               return (a < b ? -1 : 1);
