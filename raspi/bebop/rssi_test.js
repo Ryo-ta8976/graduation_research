@@ -50,6 +50,7 @@ const get_rssi = new Promise(resolve => {
 
         //array = res[0];
         //array = array.map(Number);
+        console.log(array);
         array.sort(
           function (a, b) {
             return (a < b ? -1 : 1);
