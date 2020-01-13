@@ -85,6 +85,7 @@ const main = async () => {
   for (var i = 0; i < 8; i++) {
     let rssi_max = await get_rssi;
     rssi_array.push(rssi_max);
+    console.log(rssi_max)
 
     console.log("wait 1500");
     await sleep(1500);
