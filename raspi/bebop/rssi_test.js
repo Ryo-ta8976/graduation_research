@@ -64,7 +64,7 @@ const get_rssi = new Promise(resolve => {
         //
         console.log(array[9]);
         resolve(array[9]);
-        fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+        //fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
       }
     }
   })
