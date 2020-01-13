@@ -18,40 +18,43 @@ noble.on('stateChange', function (state) {
 
 //search ble
 noble.on('discover', function (peripheral) {
-  //output seach device
-  console.log("DEVICE_NAME: " + peripheral.advertisement.localName);
-  console.log("UUID: " + peripheral.uuid);
-  console.log("RSSI: " + peripheral.rssi);
-  console.log();
+  return new Promise((resolve) => {
+    //output seach device
+    console.log("DEVICE_NAME: " + peripheral.advertisement.localName);
+    console.log("UUID: " + peripheral.uuid);
+    console.log("RSSI: " + peripheral.rssi);
+    console.log();
 
-  //equals devicename
-  if (peripheral.advertisement.localName == DEVICE_NAME) {
-    count++;
-    console.log("device find");
-    noble.stopScanning();
-    fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
-    });
-    if (count < 10) {
-      noble.startScanning();
-    } else {
-      let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
-      let res = csvSync(data);
-      let array = [];
-
-      array = res[0];
-      array = array.map(Number);
-      array.sort(
-        function (a, b) {
-          return (a < b ? -1 : 1);
-        }
-      );
-
-      let ave = array[9];
-      exports.ave = ave;
-      console.log(ave);
-      fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
+    //equals devicename
+    if (peripheral.advertisement.localName == DEVICE_NAME) {
+      count++;
+      console.log("device find");
+      noble.stopScanning();
+      fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
       });
-      fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      if (count < 10) {
+        noble.startScanning();
+      } else {
+        let data = fs.readFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+        let res = csvSync(data);
+        let array = [];
+
+        array = res[0];
+        array = array.map(Number);
+        array.sort(
+          function (a, b) {
+            return (a < b ? -1 : 1);
+          }
+        );
+
+        // let ave = array[9];
+        // exports.ave = ave;
+        // console.log(ave);
+        // fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
+        // });
+        resolve(array[9]);
+        fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
+      }
     }
-  }
+  })
 });
