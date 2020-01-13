@@ -83,6 +83,7 @@ function sleep(waitSec) {
 
 const main = async () => {
   //受信電波強度の計測
+  console.log(aaa);
 
   for (var i = 0; i < 8; i++) {
     let rssi_max = await get_rssi;
