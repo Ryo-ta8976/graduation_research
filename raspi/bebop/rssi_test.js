@@ -62,8 +62,8 @@ function get_rssi() {
           // console.log(ave);
           // fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble_ave.csv', ave + ',', (error) => {
           // });
-		//
-	  console.log(array[9]);
+          //
+          console.log(array[9]);
           resolve(array[9]);
           fs.unlinkSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv');
         }
@@ -82,23 +82,18 @@ function sleep(waitSec) {
 
 const main = async () => {
   //受信電波強度の計測
-  const mesure_rssi = new Promise(resolve => {
-    console.log("mesuring rssi");
-    for (var i = 0; i < 8; i++) {
-      rssi_array.push(get_rssi())
-        .then(
-          console.log("wait..."),
-          sleep(1500)
-        ).then(
-          console.log("wait"),
-          sleep(1000)
-        )
-    }
-    resolve('end mesure_rssi')
-  });
 
-  let result = await mesure_rssi;
-  console.log(result);
+  for (var i = 0; i < 8; i++) {
+    let rssi_max = await get_rssi;
+    rssi_array.push(rssi_max);
+
+    console.log("wait 1500");
+    await sleep(1500);
+
+    console.log("wait 1000");
+    await sleep(1000);
+  }
+  console.log(rssi_array);
 }
 
 main();
