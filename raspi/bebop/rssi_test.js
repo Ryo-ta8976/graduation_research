@@ -8,6 +8,7 @@ var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
 var count = 0;
 
 var rssi_array = [];
+let array = [];
 
 const get_rssi = new Promise(resolve => {
   console.log("rssi mesuring...")
@@ -38,7 +39,7 @@ const get_rssi = new Promise(resolve => {
       count++;
       console.log("device find");
       noble.stopScanning();
-      let array = [];
+
       array.push(peripheral.rssi);
       // fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
       // });
