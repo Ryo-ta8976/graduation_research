@@ -69,7 +69,7 @@ const get_rssi = new Promise(resolve => {
     }
   })
 });
-}
+
 
 function sleep(waitSec) {
   return new Promise(function (resolve) {
