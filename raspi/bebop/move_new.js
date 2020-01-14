@@ -81,6 +81,7 @@ const main = async () => {
       //5秒待機
       await sleep(5000);
 
+      startTime = performance.now();
       //8箇所のrssi計測
       for (let i = 0; i < 8; i++) {
         let rssi_max = await get_rssi();
@@ -100,9 +101,12 @@ const main = async () => {
         await sleep(1000);
       }
 
+      endTime = performance.now();
+      console.log("rssi mesure: %f", endTime - startTime);
       console.log("rssi mesured");
       await sleep(5000);
 
+      startTime = performance.now();
       //方向の決定
       const get_direction = Promise(resolve => {
         console.log("getting deirection");
@@ -132,7 +136,10 @@ const main = async () => {
       })
 
       const rotaion = await get_direction;
+      endTime = performance.now();
+      console.log("get direction: %f", endTime - startTime);
 
+      startTime = performance.now();
       //bebopの回転
       const rotate = new Promise(resolve => {
         let rotate_time = 1;
@@ -148,7 +155,10 @@ const main = async () => {
 
       result = await rotate;
       console.log(result);
+      endTime = performance.now();
+      console.log("rotate: %f", endTime - startTime);
 
+      startTime = performance.now();
       //bebopの直進
       const go_straight = new Promise(resolve => {
         let forwarding_time = 2;
@@ -164,7 +174,10 @@ const main = async () => {
 
       result = await go_straight;
       console.log(result);
+      endTime = performance.now();
+      console.log("go straight: %f", endTime - startTime);
 
+      startTime = performance.now();
       //画像の撮影
       const take_picture = new Promise(resolve => {
         const execSync = require('child_process').execSync;
@@ -174,7 +187,10 @@ const main = async () => {
 
       result = await take_picture;
       console.log(result);
+      endTime = performance.now();
+      console.log("take a picturet: %f", endTime - startTime);
 
+      startTime = performance.now();
       //線形検出
       const detect_linear = new Promise(resolve => {
         var pyshell = new PythonShell('../opencv/hough.py');
@@ -191,9 +207,13 @@ const main = async () => {
         });
       });
 
+      endTime = performance.now();
+      console.log("detect lineart: %f", endTime - startTime);
       return await detect_linear;
     })
   }
+  const endTime_all = performance.now();
+  console.log("end: %f", endTime_all - startTime_all);
 }
 
 main();
