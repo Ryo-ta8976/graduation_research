@@ -51,9 +51,11 @@ function get_rssi() {
               return (a < b ? -1 : 1);
             }
           );
-
-          console.log(array[9]);
-          resolve(array[9]);
+		count=0;
+		let max =array[9];
+		array=[];
+          console.log(max);
+          resolve(max);
         }
       }
     })
