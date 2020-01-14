@@ -51,9 +51,9 @@ function get_rssi() {
               return (a < b ? -1 : 1);
             }
           );
-		count=0;
-		let max =array[9];
-		array=[];
+          count = 0;
+          let max = array[9];
+          array = [];
           console.log(max);
           resolve(max);
         }
@@ -73,7 +73,7 @@ function sleep(waitSec) {
 
 const main = async () => {
   //受信電波強度の計測
-  console.log("aaa");
+  console.log("start");
 
   for (let i = 0; i < 8; i++) {
     let rssi_max = await get_rssi();
@@ -85,9 +85,11 @@ const main = async () => {
     console.log(i);
 
     console.log("wait 1500");
+    drone.counterClockwise(100);
     await sleep(1500);
 
     console.log("wait 1000");
+    drone.stop();
     await sleep(1000);
   }
   console.log(rssi_array);

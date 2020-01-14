@@ -1,24 +1,66 @@
+//処理時間計測
 const performance = require('perf_hooks').performance;
-
 const startTime_all = performance.now();
-var bebop = require('node-bebop');
-var PythonShell = require('python-shell');
-// var rssi = require('../rssi/rssi.js');
-
-var drone = bebop.createClient();
 var startTime;
 var endTime;
+
+//bebop制御
+var bebop = require('node-bebop');
+var PythonShell = require('python-shell');
+var drone = bebop.createClient();
 var rssi_array = [];
 let rotate_bebop; //bebopを回転させる角度index
 
+//rssi計測
+var noble = require('noble');
+var fs = require('fs');
+var DEVICE_NAME = "ble_koji";
+var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
+var SERVICE_CHARACTERISTIC_UUID = "f7913b5d5898";
+var count = 0;
+var rssi_array = [];
+let array = [];
+
+//rssi計測
 function get_rssi() {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     console.log("rssi mesuring...")
-    // var temp = rssi.ave
-    import('../rssi/rssi.js').then((rssi_ave) => {
-      resolve(rssi_ave)
+    noble.startScanning();
+
+    //search ble
+    noble.on('discover', function (peripheral) {
+      //output seach device
+      console.log("DEVICE_NAME: " + peripheral.advertisement.localName);
+      console.log("UUID: " + peripheral.uuid);
+      console.log("RSSI: " + peripheral.rssi);
+      console.log();
+
+      //equals devicename
+      if (peripheral.advertisement.localName == DEVICE_NAME) {
+        count++;
+        console.log("device find");
+        noble.stopScanning();
+
+        array.push(peripheral.rssi);
+
+        if (count < 10) {
+          noble.startScanning();
+        } else {
+          console.log(array);
+          array.sort(
+            function (a, b) {
+              return (a < b ? -1 : 1);
+            }
+          );
+          count = 0;
+          let max = array[9];
+          array = [];
+          console.log(max);
+          resolve(max);
+        }
+      }
     })
-  })
+  });
 }
 
 function sleep(waitSec) {
@@ -39,24 +81,26 @@ const main = async () => {
       //5秒待機
       await sleep(5000);
 
-      //受信電波強度の計測
-      const mesure_rssi = new Promise(resolve => {
-        console.log("mesuring rssi");
-        for (var i = 0; i < 8; i++) {
-          rssi_array.push(get_rssi())
-            .then(
-              drone.counterClockwise(100),
-              sleep(1500)
-            ).then(
-              drone.stop(),
-              sleep(1000)
-            )
-        }
-        resolve('end mesure_rssi')
-      });
+      //8箇所のrssi計測
+      for (let i = 0; i < 8; i++) {
+        let rssi_max = await get_rssi();
+        rssi_array.push(rssi_max);
+        // get_rssi.then((rssi_max) => {
+        //   rssi_array.push(rssi_max);
+        // })
+        console.log(rssi_max)
+        console.log(i);
 
-      let result = await mesure_rssi;
-      console.log(result);
+        console.log("turning");
+        drone.counterClockwise(100);
+        await sleep(1500);
+
+        console.log("stop");
+        drone.stop();
+        await sleep(1000);
+      }
+
+      console.log("rssi mesured");
       await sleep(5000);
 
       //方向の決定
@@ -83,6 +127,7 @@ const main = async () => {
           rotate_bebop = index_array - 2;
         }
 
+        console.log("rotate_bebop:" + rotate_bebop);
         resolve(rotate_bebop);
       })
 
