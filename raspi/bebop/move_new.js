@@ -6,7 +6,7 @@ var endTime;
 
 //bebop制御
 var bebop = require('node-bebop');
-var PythonShell = require('python-shell');
+var {PythonShell} = require('python-shell');
 var drone = bebop.createClient();
 var rssi_array = [];
 let rotate_bebop; //bebopを回転させる角度index
@@ -71,15 +71,21 @@ function sleep(waitSec) {
   });
 }
 
-const main = async () => {
-  while (1) {
-    drone.connect(() => {
+const main = () => {
+  //while (1){
+    drone.connect(async () => {
       //離陸
       drone.takeOff();
       console.log("drone take off");
 
       //5秒待機
       await sleep(5000);
+
+	//上昇
+	drone.up(50);
+	console.log("drone up");
+	await sleep(3000);
+	drone.stop();
 
       startTime = performance.now();
       //8箇所のrssi計測
@@ -94,7 +100,7 @@ const main = async () => {
 
         console.log("turning");
         drone.counterClockwise(100);
-        await sleep(1500);
+        await sleep(6500);
 
         console.log("stop");
         drone.stop();
@@ -108,7 +114,7 @@ const main = async () => {
 
       startTime = performance.now();
       //方向の決定
-      const get_direction = Promise(resolve => {
+      const get_direction= new Promise(resolve => {
         console.log("getting deirection");
         var temp_array = [];
 
@@ -142,7 +148,7 @@ const main = async () => {
       startTime = performance.now();
       //bebopの回転
       const rotate = new Promise(resolve => {
-        let rotate_time = 1;
+        let rotate_time = 6000;
 
         drone.counterClockwise(100);
         console.log("turning...");
@@ -161,9 +167,9 @@ const main = async () => {
       startTime = performance.now();
       //bebopの直進
       const go_straight = new Promise(resolve => {
-        let forwarding_time = 2;
+        let forwarding_time = 3000;
 
-        drone.forward(20);
+        drone.forward(30);
         console.log("forwarding");
 
         setTimeout(() => {
@@ -188,7 +194,7 @@ const main = async () => {
       result = await take_picture;
       console.log(result);
       endTime = performance.now();
-      console.log("take a picturet: %f", endTime - startTime);
+      console.log("take a picture: %f", endTime - startTime);
 
       startTime = performance.now();
       //線形検出
@@ -208,12 +214,13 @@ const main = async () => {
       });
 
       endTime = performance.now();
-      console.log("detect lineart: %f", endTime - startTime);
-      return await detect_linear;
+      console.log("detect linear: %f", endTime - startTime);
+	result=await detect_linear;
+	const endTime_all = performance.now();
+	console.log("end: %f", endTime_all - startTime_all);
+      return result;
     })
-  }
-  const endTime_all = performance.now();
-  console.log("end: %f", endTime_all - startTime_all);
+  //}
 }
 
 main();
