@@ -17,8 +17,10 @@ function get_rssi() {
     //start ble
     noble.on('stateChange', function (state) {
       if (state === 'poweredOn') {
+	      console.log("OK")
         noble.startScanning();
       } else {
+	      console.log("NO")
         noble.stopScanning();
       }
     });
