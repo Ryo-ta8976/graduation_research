@@ -15,15 +15,16 @@ function get_rssi() {
     console.log("rssi mesuring...")
 
     //start ble
-    noble.on('stateChange', function (state) {
-      if (state === 'poweredOn') {
-	      console.log("OK")
-        noble.startScanning();
-      } else {
-	      console.log("NO")
-        noble.stopScanning();
-      }
-    });
+    // noble.on('stateChange', function (state) {
+    //   if (state === 'poweredOn') {
+    //     console.log("OK")
+    //     noble.startScanning();
+    //   } else {
+    //     console.log("NO")
+    //     noble.stopScanning();
+    //   }
+    // });
+    noble.startScanning();
 
     //search ble
     noble.on('discover', function (peripheral) {
