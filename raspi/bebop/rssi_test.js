@@ -15,16 +15,16 @@ function get_rssi() {
     console.log("rssi mesuring...")
 
     //start ble
-    noble.on('stateChange', function (state) {
-      if (state === 'poweredOn') {
-        console.log("OK")
-        noble.startScanning();
-      } else {
-        console.log("NO")
-        noble.stopScanning();
-      }
-    });
-    //noble.startScanning();
+    // noble.on('stateChange', function (state) {
+    //   if (state === 'poweredOn') {
+    //     console.log("OK")
+    //     noble.startScanning();
+    //   } else {
+    //     console.log("NO")
+    //     noble.stopScanning();
+    //   }
+    // });
+    noble.startScanning();
 
     //search ble
     noble.on('discover', function (peripheral) {
@@ -74,25 +74,28 @@ function sleep(waitSec) {
 const main = async () => {
   //受信電波強度の計測
   console.log("start");
+  while (1) {
+    for (let i = 0; i < 8; i++) {
+      let rssi_max = await get_rssi();
+      rssi_array.push(rssi_max);
+      // get_rssi.then((rssi_max) => {
+      //   rssi_array.push(rssi_max);
+      // })
+      console.log(rssi_max)
+      console.log(i);
 
-  for (let i = 0; i < 8; i++) {
-    let rssi_max = await get_rssi();
-    rssi_array.push(rssi_max);
-    // get_rssi.then((rssi_max) => {
-    //   rssi_array.push(rssi_max);
-    // })
-    console.log(rssi_max)
-    console.log(i);
+      console.log("wait 1500");
+      drone.counterClockwise(100);
+      await sleep(1500);
 
-    console.log("wait 1500");
-    drone.counterClockwise(100);
-    await sleep(1500);
-
-    console.log("wait 1000");
-    drone.stop();
-    await sleep(1000);
+      console.log("wait 1000");
+      drone.stop();
+      await sleep(1000);
+    }
+    console.log(rssi_array);
   }
-  console.log(rssi_array);
 }
+
+
 
 main();
