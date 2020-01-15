@@ -71,10 +71,9 @@ function sleep(waitSec) {
   });
 }
 
-const main = () => {
+const main = async () => {
 
-  drone.connect(async () => {
-    while (1) {
+  //drone.connect(async () => {
       //離陸
       //drone.takeOff();
       console.log("drone take off");
@@ -87,6 +86,7 @@ const main = () => {
       console.log("drone up");
       await sleep(3000);
       //drone.stop();
+	while(1){
 
       startTime = performance.now();
       //8箇所のrssi計測
@@ -100,11 +100,11 @@ const main = () => {
         console.log(i);
 
         console.log("turning");
-        drone.counterClockwise(100);
+        //drone.counterClockwise(100);
         await sleep(6500);
 
         console.log("stop");
-        drone.stop();
+        //drone.stop();
         await sleep(1000);
       }
 
@@ -203,13 +203,12 @@ const main = () => {
         var pyshell = new PythonShell('../opencv/hough.py');
         pyshell.on('message', function (data) {
           if (data == "error") {
-            console.log("continue...")
-            resolve(true);
+            resolve("continue");
           } else {
             console.log("end")
             //drone.land();
 
-            resolve(false);
+            resolve("end");
           }
         });
       });
@@ -219,9 +218,12 @@ const main = () => {
       result = await detect_linear;
       const endTime_all = performance.now();
       console.log("end: %f", endTime_all - startTime_all);
-      return result;
+	    console.log(result);
+	    if(result=="end"){
+		    break;
+	    }
     }
-  })
+  //})
 
 }
 
