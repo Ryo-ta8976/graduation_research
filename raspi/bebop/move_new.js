@@ -216,10 +216,11 @@ const main = () => {
       endTime = performance.now();
       console.log("detect linear: %f", endTime - startTime);
       result = await detect_linear;
-      const endTime_all = performance.now();
-      console.log("end: %f", endTime_all - startTime_all);
+
       console.log(result);
       if (result == "end") {
+        const endTime_all = performance.now();
+        console.log("end: %f", endTime_all - startTime_all);
         break;
       }
     }
