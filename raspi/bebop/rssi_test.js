@@ -1,6 +1,6 @@
 var noble = require('noble');
 var fs = require('fs');
-var exportsub = require('../rssi/rssi_new.js');
+var exportsub = require('../rssi/rssi.js');
 
 var DEVICE_NAME = "ble_koji";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
@@ -77,8 +77,8 @@ const main = async () => {
   console.log("start");
   while (1) {
     for (let i = 0; i < 8; i++) {
-      //const rssi_max = await get_rssi();
-      const rssi_max = await exportsub.submodule();
+      const rssi_max = await get_rssi();
+      //const rssi_max = await exportsub.submodule();
       rssi_array.push(rssi_max);
       // get_rssi.then((rssi_max) => {
       //   rssi_array.push(rssi_max);
