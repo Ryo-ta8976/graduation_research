@@ -1,6 +1,6 @@
 var noble = require('noble');
 var fs = require('fs');
-var exportsub = require('../rssi/rssi.js');
+var exportsub = require('../rssi/rssi_new.js');
 
 var DEVICE_NAME = "ble_koji";
 var SERVICE_UUID = "713d0000503e4c75ba943148f18d941e";
