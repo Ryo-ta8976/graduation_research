@@ -78,7 +78,7 @@ const main = async () => {
   while (1) {
     for (let i = 0; i < 8; i++) {
       //const rssi_max = await get_rssi();
-      const rssi_max = await exportsub();
+      const rssi_max = await exportsub.submodule();
       rssi_array.push(rssi_max);
       // get_rssi.then((rssi_max) => {
       //   rssi_array.push(rssi_max);
