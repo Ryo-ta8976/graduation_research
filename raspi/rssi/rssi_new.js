@@ -35,7 +35,7 @@ exports.submodule = () => {
         });
         for (let i = 1; i < 10; i++) {
           peripheral.updateRssi(function (error, rssi) {
-            fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', peripheral.rssi + ',', (error) => {
+            fs.appendFileSync('/home/pi/Desktop/kenkyu/raspi/rssi/ble.csv', rssi + ',', (error) => {
             });
           });
         }
