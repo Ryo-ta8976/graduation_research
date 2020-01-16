@@ -82,9 +82,9 @@ const main = () => {
     await sleep(5000);
 
     //上昇
-    drone.up(50);
+    drone.up(70);
     console.log("drone up");
-    await sleep(3000);
+    await sleep(6000);
     drone.stop();
 
     while (1) {
@@ -120,6 +120,8 @@ const main = () => {
         var temp_array = [];
 
         temp_array = rssi_array;
+	      rssi_array=[];
+	      console.log(temp_array);
         //昇順ソート
         temp_array.sort(
           function (a, b) {
@@ -127,8 +129,10 @@ const main = () => {
           }
         );
 
-        let rssi_max = temp_array[9];
+        let rssi_max = temp_array[7];
+	      console.log(rssi_max);
         let index_array = rssi_array.indexOf(rssi_max); //電波強度が最大の時のindex
+	      console.log(index_array);
 
         if (index_array == 0) {
           rotate_bebop = 6;
@@ -168,9 +172,9 @@ const main = () => {
       startTime = performance.now();
       //bebopの直進
       const go_straight = new Promise(resolve => {
-        let forwarding_time = 3000;
+        let forwarding_time = 8000;
 
-        drone.forward(30);
+        drone.forward(60);
         console.log("forwarding");
 
         setTimeout(() => {
