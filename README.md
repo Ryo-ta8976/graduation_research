@@ -3,10 +3,10 @@
 
 # DEMO
 * システム全体像
-![Uploading スクリーンショット 2020-04-25 23.45.54.png…]()
+![システム全体像](https://github.com/Ryo-ta8976/graduation_research/blob/images/system.png)
 
 * web表示例
-![Uploading スクリーンショット 2020-04-25 23.43.16.png…]()
+![web表示例](https://github.com/Ryo-ta8976/graduation_research/blob/images/webpage.png)
 
 # Features
 今後記載
