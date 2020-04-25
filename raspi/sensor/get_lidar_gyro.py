@@ -1,8 +1,8 @@
 import serial
-import smbus            # use I2C
-import math             # mathmatics
+import smbus
+import math
 import time
-from time import sleep  # time module
+from time import sleep
 import numpy as np
 import json
 import collections as cl
@@ -10,11 +10,12 @@ import requests
 import sys
 
 
-# slave address
 t_before = time.time()
 
-DEV_ADDR = 0x68         # device address
-# register address
+DEV_ADDR = 0x68  # ジャイロのアドレス
+address = 0x62  # Lider Lite v3のアドレス
+
+# レジスタのアドレス
 ACCEL_XOUT = 0x3b
 ACCEL_YOUT = 0x3d
 ACCEL_ZOUT = 0x3f
@@ -22,45 +23,48 @@ TEMP_OUT = 0x41
 GYRO_XOUT = 0x43
 GYRO_YOUT = 0x45
 GYRO_ZOUT = 0x47
-
-address = 0x62  # Lider Lite v3のアドレス
 ACQ_COMMAND = 0x00
 STATUS = 0x01
 FULL_DELAY_HIGH = 0x0f
 FULL_DELAY_LOW = 0x10
 
-sum_degree = 0.0
-sum_deg = 0.0
+# 送信先URL
+#URL = 'http://192.168.10.3:1234/post_data'
+URL = 'http://192.168.42.58:1234/post_data'
+
+# 変数の初期化
+sum_degree_mesured = 0.0
+sum_degree_mesuring = 0.0
 timeval = 0.001
 i = 0
 count_point = 0
 gyro_z = []
 rotation_degree = []
 dist = []
+rot = []
 
 bus = smbus.SMBus(1)
-#bus.write_byte_data(DEV_ADDR, PWR_MGMT_1, 0)
 
 
-# 1byte read
+# 1byteの読み込み
 def read_byte(adr):
     return bus.read_byte_data(DEV_ADDR, adr)
-# 2byte read
 
 
+# 2byteの読み込み
 def read_word(adr):
     high = bus.read_byte_data(DEV_ADDR, adr)
     low = bus.read_byte_data(DEV_ADDR, adr+1)
     val = (high << 8) + low
     return val
-# Sensor data read
 
 
+# センサデータの読み込み
 def read_word_sensor(adr):
     val = read_word(adr)
-    if (val >= 0x8000):         # minus
+    if (val >= 0x8000):
         return -((65535 - val) + 1)
-    else:                       # plus
+    else:
         return val
 
 
@@ -85,7 +89,6 @@ def get_dist():
         value = bus.read_byte_data(address, STATUS)
 
     # 0x8fから2バイト読み込んで16bitの測定距離をcm単位で取得する
-
     high = bus.read_byte_data(address, FULL_DELAY_HIGH)
     low = bus.read_byte_data(address, FULL_DELAY_LOW)
     val = (high << 8) + low
@@ -94,59 +97,52 @@ def get_dist():
     return dist
 
 
-# for i in range(500):
-#     value = get_dist()
-
-#     z = get_gyro_data_deg()
-#     t_after = time.time()
-#     elapsed_time = t_after-t_before
-#     t_before = t_after
-#     gyro_z.append(z)
-
-#     dist.append(value)
-#     rotation_degree.append(z*elapsed_time)
-
-#     sleep(timeval)
-
-while(1):
+while (1):
+    # 距離を取得
     value = get_dist()
+    # 回転角速度の取得
     z = get_gyro_data_deg()
 
+    # 一回計測するのに必要な時間を計算
     t_after = time.time()
     elapsed_time = t_after-t_before
     t_before = t_after
+
+    # 配列への追加
     gyro_z.append(z)
     dist.append(value)
+
+    # 回転角を計算
     actual_rotation = z * elapsed_time
     rotation_degree.append(actual_rotation)
-    sum_deg += actual_rotation
+    sum_degree_mesuring += actual_rotation
+
     sleep(timeval)
     count_point += 1
-    print(sum_deg)
-    if (sum_deg > 300):
+    print(sum_degree_mesuring)
+
+    if (sum_degree_mesuring > 300):
         print("stop")
         break
 
 
-# file=open('test_lidar_time.csv','w')
-
-rot = []
 for i in range(count_point):
-    sum_degree = sum_degree+rotation_degree[i]
-    rot.append(sum_degree)
-    #file.write("%d,%08.3f\n" % (dist[i],sum_degree) )
+    sum_degree_mesured = sum_degree_mesured+rotation_degree[i]
+    rot.append(sum_degree_mesured)
 
+
+# 標準出力からの読み込み
 error_degree = sys.stdin.readline()
+
+
 if (error_degree != None):
-    # ys=cl.OrderedDict()
+    # 送信用辞書の作成
     data = cl.OrderedDict()
     data["dist"] = dist
     data["rot"] = rot
     data["count"] = count_point
     data["error_degree"] = error_degree
-    data = json.dumps(data)  # objectからstringに変換
+    data = json.dumps(data)
     print("send data")
-    #url = 'http://192.168.10.3:1234/post_data'
-    url = 'http://192.168.42.58:1234/post_data'
-    #url = 'http://172.16.10.137:1234/post_data'
-    result = requests.post(url, data)
+
+    result = requests.post(URL, data)
