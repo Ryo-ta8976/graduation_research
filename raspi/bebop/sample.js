@@ -1,3 +1,7 @@
+/**
+ * bebopサンプルプログラム
+ */
+
 var bebop = require('node-bebop');
 
 var drone = bebop.createClient();
@@ -11,5 +15,5 @@ drone.connect(function () {
 
 	setTimeout(function () {
 		drone.land();
-	},7000);
+	}, 7000);
 });

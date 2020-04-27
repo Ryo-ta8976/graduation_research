@@ -1,5 +1,5 @@
 /**
- * rssi取得用モジュールの読み込み
+ * nodeでのble取得用モジュールの読み込み
  * @type {Object} 
  */
 var noble = require('noble');
